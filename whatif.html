@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tableau What If — AIDEO</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --orange: #E87722; --turquoise: #00A99D; --bg: #F7F7F5; --white: #FFFFFF;
+  --text: #1A1A1A; --muted: #6B6B6B; --border: #E0DDD8;
+  --green: #0F6E56; --red: #993C1D; --radius: 10px;
+  --pess: #E24B4A; --moy: #E87722; --opti: #1D9E75;
+  --pess-bg: #FEF2F2; --moy-bg: #FFF8F4; --opti-bg: #F0FAF8;
+}
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+header { background: var(--white); border-bottom: 1px solid var(--border); padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
+header h1 { font-size: 18px; font-weight: 600; color: var(--orange); }
+nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 32px; display: flex; }
+nav a { display: inline-block; padding: 12px 20px; font-size: 14px; color: var(--muted); text-decoration: none; border-bottom: 3px solid transparent; transition: all .2s; }
+nav a:hover { color: var(--orange); }
+nav a.active { color: var(--orange); border-bottom-color: var(--orange); font-weight: 500; }
+.main { max-width: 1300px; margin: 0 auto; padding: 32px 24px; }
+.page-title { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+.page-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+.top-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+.card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+.card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 14px; }
+.scenarios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.scenario-col { padding: 12px; border-right: 1px solid var(--border); }
+.scenario-col:last-child { border-right: none; }
+.scenario-col.pess { background: var(--pess-bg); }
+.scenario-col.moy { background: var(--moy-bg); }
+.scenario-col.opti { background: var(--opti-bg); }
+.sc-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.sc-label.pess { color: var(--pess); }
+.sc-label.moy { color: var(--moy); }
+.sc-label.opti { color: var(--opti); }
+.sc-dot { width: 8px; height: 8px; border-radius: 50%; }
+.sc-dot.pess { background: var(--pess); }
+.sc-dot.moy { background: var(--moy); }
+.sc-dot.opti { background: var(--opti); }
+.sc-input-row { display: flex; flex-direction: column; gap: 6px; }
+.sc-input-item { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.sc-input-item label { font-size: 11px; color: var(--muted); flex: 1; }
+.sc-input-item input { width: 60px; padding: 4px 6px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; text-align: right; background: var(--white); }
+.charges-table { width: 100%; font-size: 13px; border-collapse: collapse; }
+.charges-table th { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; padding: 6px 10px; border-bottom: 1px solid var(--border); text-align: right; }
+.charges-table th:first-child { text-align: left; }
+.charges-table th.pess { color: var(--pess); }
+.charges-table th.moy { color: var(--moy); }
+.charges-table th.opti { color: var(--opti); }
+.charges-table td { padding: 7px 10px; border-bottom: 1px solid var(--border); text-align: right; }
+.charges-table td:first-child { text-align: left; font-size: 12px; color: var(--muted); }
+.charges-table input { width: 70px; padding: 4px 6px; border: 1px solid var(--border); border-radius: 4px; font-size: 12px; text-align: right; background: var(--white); }
+.charges-table input:focus { outline: none; border-color: var(--orange); }
+.objective-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.obj-item { display: flex; flex-direction: column; gap: 4px; }
+.obj-item label { font-size: 12px; color: var(--muted); font-weight: 500; }
+.obj-item input { padding: 7px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-weight: 600; color: var(--orange); width: 160px; }
+.period-switcher { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 20px; width: fit-content; }
+.period-btn { padding: 9px 20px; font-size: 13px; font-weight: 500; cursor: pointer; background: var(--white); border: none; color: var(--muted); transition: all .2s; }
+.period-btn.active { background: var(--orange); color: #fff; }
+.matrix-section { margin-bottom: 24px; }
+.matrix-title { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 12px; }
+.matrix-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.matrix-table th { padding: 10px 14px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); border-bottom: 2px solid var(--border); text-align: center; }
+.matrix-table th:first-child { text-align: left; }
+.matrix-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); text-align: center; font-weight: 600; font-size: 14px; }
+.matrix-table td:first-child { text-align: left; font-weight: 500; font-size: 12px; color: var(--muted); }
+.matrix-table tr.highlight td { background: #FFFBF0; }
+.matrix-cell { display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.matrix-cell .val { font-size: 14px; font-weight: 700; }
+.matrix-cell .delta { font-size: 10px; color: var(--muted); }
+.pos { color: var(--green); }
+.neg { color: var(--red); }
+.neutral { color: var(--muted); }
+.obj-ok { background: #F0FAF8 !important; }
+.obj-ko { background: #FEF2F2 !important; }
+.obj-badge { font-size: 10px; padding: 2px 6px; border-radius: 10px; font-weight: 600; display: inline-block; margin-top: 2px; }
+.obj-badge.ok { background: var(--green); color: #fff; }
+.obj-badge.ko { background: var(--pess); color: #fff; }
+.detail-section { margin-bottom: 24px; }
+.detail-section table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.detail-section thead th { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; padding: 8px 12px; border-bottom: 2px solid var(--border); text-align: right; }
+.detail-section thead th:first-child { text-align: left; }
+.detail-section thead th:nth-child(2) { text-align: left; }
+.detail-section tbody td { padding: 9px 12px; border-bottom: 1px solid var(--border); text-align: right; font-size: 12px; }
+.detail-section tbody td:first-child { text-align: left; color: var(--muted); font-size: 11px; min-width: 80px; }
+.detail-section tbody td:nth-child(2) { text-align: left; font-weight: 500; font-size: 13px; }
+.detail-section tbody tr.subtotal td { background: #FAFAFA; font-weight: 600; }
+.charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.chart-box { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
+.chart-box h3 { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 12px; }
+.chart-wrap { position: relative; height: 220px; }
+.legend { display: flex; gap: 16px; margin-bottom: 10px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+.no-data { text-align: center; padding: 48px 20px; color: var(--muted); font-size: 14px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); }
+.no-data strong { display: block; font-size: 16px; margin-bottom: 8px; color: var(--text); }
+.badge-pess { background: var(--pess-bg); color: var(--pess); padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+.badge-moy { background: var(--moy-bg); color: var(--moy); padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+.badge-opti { background: var(--opti-bg); color: var(--opti); padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+.col-pess { border-left: 3px solid var(--pess); }
+.col-moy { border-left: 3px solid var(--moy); }
+.col-opti { border-left: 3px solid var(--opti); }
+footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 32px; }
+@media (max-width: 900px) { .top-layout { grid-template-columns: 1fr; } .charts-row { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>AIDEO — Simulateurs Rentabilité</h1>
+  <span>Formations IA</span>
+</header>
+<nav>
+  <a href="simulateur-1j.html">1 Journée</a>
+  <a href="simulateur-mj.html">Multi-jours</a>
+  <a href="agenda.html">Agenda prévisionnel</a>
+  <a href="whatif.html" class="active">Tableau What If</a>
+</nav>
+
+<div class="main">
+  <div class="page-title">Tableau What If — Comparatif prévisionnel</div>
+  <div class="page-sub">Comparez 9 combinaisons (3 niveaux de participants × 3 niveaux de charges) sur toutes vos sessions planifiées dans l'agenda.</div>
+
+  <div class="top-layout">
+    <!-- Participants par formation -->
+    <div class="card">
+      <div class="card-title">Participants par formation et par scénario</div>
+      <div class="scenarios-grid">
+        <div class="scenario-col pess">
+          <div class="sc-label pess"><div class="sc-dot pess"></div>Pessimiste</div>
+          <div class="sc-input-row" id="pess-inputs"></div>
+        </div>
+        <div class="scenario-col moy">
+          <div class="sc-label moy"><div class="sc-dot moy"></div>Moyen</div>
+          <div class="sc-input-row" id="moy-inputs"></div>
+        </div>
+        <div class="scenario-col opti">
+          <div class="sc-label opti"><div class="sc-dot opti"></div>Optimiste</div>
+          <div class="sc-input-row" id="opti-inputs"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charges par scénario -->
+    <div class="card">
+      <div class="card-title">Charges par scénario</div>
+      <table class="charges-table">
+        <thead>
+          <tr>
+            <th>Charge</th>
+            <th class="pess">Pessimiste</th>
+            <th class="moy">Moyen</th>
+            <th class="opti">Optimiste</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Loyer HT / jour (€)</td>
+            <td><input type="number" id="c_loyer_p" value="280" oninput="calc()"></td>
+            <td><input type="number" id="c_loyer_m" value="250" oninput="calc()"></td>
+            <td><input type="number" id="c_loyer_o" value="200" oninput="calc()"></td>
+          </tr>
+          <tr>
+            <td>Repas perso / jour (€)</td>
+            <td><input type="number" id="c_repas_p" value="25" oninput="calc()"></td>
+            <td><input type="number" id="c_repas_m" value="25" oninput="calc()"></td>
+            <td><input type="number" id="c_repas_o" value="25" oninput="calc()"></td>
+          </tr>
+          <tr>
+            <td>Pub HT / session (€)</td>
+            <td><input type="number" id="c_pub_p" value="150" oninput="calc()"></td>
+            <td><input type="number" id="c_pub_m" value="100" oninput="calc()"></td>
+            <td><input type="number" id="c_pub_o" value="70" oninput="calc()"></td>
+          </tr>
+          <tr>
+            <td>Admin / stagiaire (€)</td>
+            <td><input type="number" id="c_admin_p" value="5" oninput="calc()"></td>
+            <td><input type="number" id="c_admin_m" value="0" oninput="calc()"></td>
+            <td><input type="number" id="c_admin_o" value="0" oninput="calc()"></td>
+          </tr>
+          <tr>
+            <td>Qualiopi (% CA HT)</td>
+            <td><input type="number" id="c_qual_p" value="10" oninput="calc()"></td>
+            <td><input type="number" id="c_qual_m" value="10" oninput="calc()"></td>
+            <td><input type="number" id="c_qual_o" value="10" oninput="calc()"></td>
+          </tr>
+          <tr>
+            <td>Prix vente HT/pers/jour (€)</td>
+            <td><input type="number" id="c_prix_p" value="350" oninput="calc()"></td>
+            <td><input type="number" id="c_prix_m" value="350" oninput="calc()"></td>
+            <td><input type="number" id="c_prix_o" value="350" oninput="calc()"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Objectif et période -->
+  <div class="card" style="margin-bottom:24px;">
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;">
+      <div class="objective-row">
+        <div class="obj-item">
+          <label>Objectif de marge HT (€)</label>
+          <input type="number" id="obj_marge" value="10000" oninput="calc()" style="padding:7px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-weight:600;color:var(--orange);width:160px;">
+        </div>
+      </div>
+      <div class="period-switcher">
+        <button class="period-btn active" onclick="setPeriod('mois')">Mois en cours</button>
+        <button class="period-btn" onclick="setPeriod('trimestre')">Trimestre</button>
+        <button class="period-btn" onclick="setPeriod('annee')">Année</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="no-data" class="no-data" style="display:none;">
+    <strong>Aucune session planifiée</strong>
+    Commencez par ajouter des formations dans l'<a href="agenda.html" style="color:var(--orange);">Agenda prévisionnel</a>, puis revenez ici.
+  </div>
+
+  <div id="results">
+    <!-- Matrice 3x3 -->
+    <div class="card matrix-section">
+      <div class="card-title">Matrice de décision — Marge brute HT <span style="font-weight:400;text-transform:none;font-size:11px;margin-left:8px;" id="period-label-title"></span></div>
+      <div style="display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap;">
+        <div style="font-size:12px;color:var(--muted);">Lignes = niveau de participants &nbsp;|&nbsp; Colonnes = niveau de charges</div>
+      </div>
+      <table class="matrix-table" id="matrix-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="col-pess"><span class="badge-pess">Charges pessimistes</span></th>
+            <th class="col-moy"><span class="badge-moy">Charges moyennes</span></th>
+            <th class="col-opti"><span class="badge-opti">Charges optimistes</span></th>
+          </tr>
+        </thead>
+        <tbody id="matrix-body"></tbody>
+      </table>
+    </div>
+
+    <!-- Vue axe participants -->
+    <div class="card matrix-section">
+      <div class="card-title">Vue par niveau de participants (charges moyennes) <span id="period-label-2"></span></div>
+      <table class="matrix-table" id="axis-part-table">
+        <thead>
+          <tr>
+            <th>Session</th>
+            <th><span class="badge-pess">Pessimiste</span></th>
+            <th><span class="badge-moy">Moyen</span></th>
+            <th><span class="badge-opti">Optimiste</span></th>
+          </tr>
+        </thead>
+        <tbody id="axis-part-body"></tbody>
+      </table>
+    </div>
+
+    <!-- Vue axe charges -->
+    <div class="card matrix-section">
+      <div class="card-title">Vue par niveau de charges (participants moyens) <span id="period-label-3"></span></div>
+      <table class="matrix-table" id="axis-charges-table">
+        <thead>
+          <tr>
+            <th>Session</th>
+            <th><span class="badge-pess">Charges pessimistes</span></th>
+            <th><span class="badge-moy">Charges moyennes</span></th>
+            <th><span class="badge-opti">Charges optimistes</span></th>
+          </tr>
+        </thead>
+        <tbody id="axis-charges-body"></tbody>
+      </table>
+    </div>
+
+    <!-- Graphiques -->
+    <div class="charts-row">
+      <div class="chart-box">
+        <h3>Marge — 3 scénarios diagonaux</h3>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--pess)"></div>Tout pessimiste</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--moy)"></div>Tout moyen</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--opti)"></div>Tout optimiste</div>
+        </div>
+        <div class="chart-wrap"><canvas id="chart-diag"></canvas></div>
+      </div>
+      <div class="chart-box">
+        <h3>Impact charges vs participants (scénario moyen)</h3>
+        <div class="chart-wrap"><canvas id="chart-impact"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>AIDEO © 2026 — Frédéric Ruault — contact@aideo.fr</footer>
+
+<script>
+const FORMATIONS = {
+  n1:     { label: 'ChatGPT / Claude N1', jours: 1 },
+  n2gpt:  { label: 'ChatGPT N2',          jours: 1 },
+  n2cl:   { label: 'Claude N2',           jours: 1 },
+  rs:     { label: 'Réseaux Sociaux & IA',jours: 2 },
+  crea:   { label: 'Créa Image & Vidéo',  jours: 1 },
+  notion: { label: 'Notion pour les pros',jours: 2 },
+};
+const MOIS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const F_DEFAULTS = { n1:[5,7,10], n2gpt:[4,6,8], n2cl:[4,6,8], rs:[5,7,9], crea:[3,5,7], notion:[4,6,8] };
+
+let period = 'mois';
+let chartDiag = null, chartImpact = null;
+
+// Build participant inputs
+function buildInputs() {
+  ['pess','moy','opti'].forEach((sc, si) => {
+    const container = document.getElementById(sc + '-inputs');
+    container.innerHTML = '';
+    Object.entries(FORMATIONS).forEach(([key, f]) => {
+      const div = document.createElement('div');
+      div.className = 'sc-input-item';
+      div.innerHTML = `<label>${f.label}</label><input type="number" id="n_${key}_${sc}" value="${F_DEFAULTS[key][si]}" min="1" max="30" oninput="calc()" style="width:52px;">`;
+      container.appendChild(div);
+    });
+  });
+}
+
+function v(id) { return parseFloat(document.getElementById(id)?.value) || 0; }
+function eur(n) { return Math.round(n).toLocaleString('fr-FR') + ' €'; }
+function formatDate(str) { const [y,m,d] = str.split('-'); return `${parseInt(d)} ${MOIS_FR[parseInt(m)-1]}`; }
+
+function getCharge(type, sc) {
+  return { loyer: v(`c_loyer_${sc[0]}`), repas: v(`c_repas_${sc[0]}`), pub: v(`c_pub_${sc[0]}`), admin: v(`c_admin_${sc[0]}`), qual: v(`c_qual_${sc[0]}`) / 100, prix: v(`c_prix_${sc[0]}`) };
+}
+
+function calcOne(session, partSc, chargeSc) {
+  const f = FORMATIONS[session.formation];
+  const n = v(`n_${session.formation}_${partSc}`);
+  const c = getCharge('all', chargeSc);
+  const j = f.jours;
+  const ca = n * c.prix * j;
+  const charges = (c.loyer * j) + (c.repas * j) + c.pub + (n * c.admin) + (ca * c.qual);
+  return { ca, charges, marge: ca - charges, n };
+}
+
+function setPeriod(p) {
+  period = p;
+  document.querySelectorAll('.period-btn').forEach((b,i) => b.classList.toggle('active', ['mois','trimestre','annee'][i] === p));
+  calc();
+}
+
+function filterSessions(sessions) {
+  const now = new Date();
+  const y = now.getFullYear(), m = now.getMonth();
+  if (period === 'mois') {
+    return sessions.filter(s => { const [sy,sm] = s.date.split('-'); return parseInt(sy)===y && parseInt(sm)===m+1; });
+  } else if (period === 'trimestre') {
+    const trimStart = Math.floor(m/3)*3;
+    return sessions.filter(s => { const [sy,sm] = s.date.split('-'); return parseInt(sy)===y && parseInt(sm)-1>=trimStart && parseInt(sm)-1<=trimStart+2; });
+  } else {
+    return sessions.filter(s => { const [sy] = s.date.split('-'); return parseInt(sy)===y; });
+  }
+}
+
+function getPeriodLabel() {
+  const now = new Date();
+  if (period === 'mois') return MOIS_FR[now.getMonth()] + ' ' + now.getFullYear();
+  if (period === 'trimestre') return 'T' + (Math.floor(now.getMonth()/3)+1) + ' ' + now.getFullYear();
+  return 'Année ' + now.getFullYear();
+}
+
+function calc() {
+  const allSessions = JSON.parse(localStorage.getItem('aideo_sessions') || '[]');
+  const sessions = filterSessions(allSessions).sort((a,b) => a.date.localeCompare(b.date));
+  
+  const label = getPeriodLabel();
+  ['period-label-title','period-label-2','period-label-3'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = '— ' + label;
+  });
+
+  if (sessions.length === 0) {
+    document.getElementById('no-data').style.display = 'block';
+    document.getElementById('results').style.display = 'none';
+    return;
+  }
+  document.getElementById('no-data').style.display = 'none';
+  document.getElementById('results').style.display = 'block';
+
+  const obj = v('obj_marge');
+  const PART_SC = ['pess','moy','opti'];
+  const CHARGE_SC = ['p','m','o'];
+  const LABELS_P = ['Participants pessimistes','Participants moyens','Participants optimistes'];
+  const LABELS_C = ['Charges pess.','Charges moy.','Charges opti.'];
+
+  // Totaux pour chaque combinaison 3×3
+  const totals = {};
+  PART_SC.forEach(ps => {
+    totals[ps] = {};
+    CHARGE_SC.forEach(cs => {
+      let totalCA = 0, totalCharges = 0;
+      sessions.forEach(s => {
+        const r = calcOne(s, ps, cs);
+        totalCA += r.ca; totalCharges += r.charges;
+      });
+      totals[ps][cs] = { ca: totalCA, charges: totalCharges, marge: totalCA - totalCharges };
+    });
+  });
+
+  // Matrice 3×3
+  const refMarge = totals['moy']['m'].marge;
+  let matrixHTML = '';
+  PART_SC.forEach((ps, pi) => {
+    const isHighlight = pi === 1;
+    matrixHTML += `<tr${isHighlight?' class="highlight"':''}>`;
+    matrixHTML += `<td>${LABELS_P[pi]}</td>`;
+    CHARGE_SC.forEach((cs, ci) => {
+      const m = totals[ps][cs].marge;
+      const delta = m - refMarge;
+      const cls = m >= obj ? 'obj-ok' : 'obj-ko';
+      const badge = m >= obj ? '<span class="obj-badge ok">✓ Objectif</span>' : '<span class="obj-badge ko">✗ Insuffisant</span>';
+      const deltaStr = delta === 0 ? '' : `<div class="delta ${delta>0?'pos':'neg'}">${delta>0?'+':''}${eur(delta)}</div>`;
+      matrixHTML += `<td class="${cls} col-${['pess','moy','opti'][ci]}"><div class="matrix-cell"><div class="val ${m>=0?'pos':'neg'}">${eur(m)}</div>${deltaStr}${badge}</div></td>`;
+    });
+    matrixHTML += '</tr>';
+  });
+  document.getElementById('matrix-body').innerHTML = matrixHTML;
+
+  // Vue axe participants (charges moyennes)
+  let axisPartHTML = '';
+  sessions.forEach(s => {
+    const f = FORMATIONS[s.formation];
+    axisPartHTML += `<tr><td>${formatDate(s.date)}</td><td style="text-align:left;font-weight:500;">${f.label}</td>`;
+    PART_SC.forEach(ps => {
+      const r = calcOne(s, ps, 'm');
+      axisPartHTML += `<td class="${r.marge>=0?'pos':'neg'}">${eur(r.marge)}<div style="font-size:10px;color:var(--muted);">${r.n} pers · ${eur(r.ca)} CA</div></td>`;
+    });
+    axisPartHTML += '</tr>';
+  });
+  // Totaux
+  axisPartHTML += '<tr class="subtotal"><td colspan="2">TOTAL ' + label.toUpperCase() + '</td>';
+  PART_SC.forEach(ps => {
+    const t = totals[ps]['m'];
+    axisPartHTML += `<td class="${t.marge>=0?'pos':'neg'}">${eur(t.marge)}<div style="font-size:10px;color:var(--muted);">CA: ${eur(t.ca)}</div></td>`;
+  });
+  axisPartHTML += '</tr>';
+  document.getElementById('axis-part-body').innerHTML = axisPartHTML;
+
+  // Vue axe charges (participants moyens)
+  let axisChargesHTML = '';
+  sessions.forEach(s => {
+    const f = FORMATIONS[s.formation];
+    axisChargesHTML += `<tr><td>${formatDate(s.date)}</td><td style="text-align:left;font-weight:500;">${f.label}</td>`;
+    CHARGE_SC.forEach(cs => {
+      const r = calcOne(s, 'moy', cs);
+      axisChargesHTML += `<td class="${r.marge>=0?'pos':'neg'}">${eur(r.marge)}<div style="font-size:10px;color:var(--muted);">${eur(r.charges)} charges</div></td>`;
+    });
+    axisChargesHTML += '</tr>';
+  });
+  axisChargesHTML += '<tr class="subtotal"><td colspan="2">TOTAL ' + label.toUpperCase() + '</td>';
+  CHARGE_SC.forEach(cs => {
+    const t = totals['moy'][cs];
+    axisChargesHTML += `<td class="${t.marge>=0?'pos':'neg'}">${eur(t.marge)}<div style="font-size:10px;color:var(--muted);">CA: ${eur(t.ca)}</div></td>`;
+  });
+  axisChargesHTML += '</tr>';
+  document.getElementById('axis-charges-body').innerHTML = axisChargesHTML;
+
+  // Graphiques
+  drawCharts(sessions, totals, obj);
+}
+
+function drawCharts(sessions, totals, obj) {
+  if (chartDiag) chartDiag.destroy();
+  if (chartImpact) chartImpact.destroy();
+
+  // Graphique 1 : 3 scénarios diagonaux par session
+  const labels = sessions.map(s => formatDate(s.date) + ' · ' + FORMATIONS[s.formation].label.substring(0,10));
+  const diagPess = sessions.map(s => Math.round(calcOne(s,'pess','p').marge));
+  const diagMoy  = sessions.map(s => Math.round(calcOne(s,'moy','m').marge));
+  const diagOpti = sessions.map(s => Math.round(calcOne(s,'opti','o').marge));
+
+  chartDiag = new Chart(document.getElementById('chart-diag'), {
+    type: 'bar',
+    data: { labels, datasets: [
+      { label: 'Tout pessimiste', data: diagPess, backgroundColor: 'rgba(226,75,74,0.7)' },
+      { label: 'Tout moyen',      data: diagMoy,  backgroundColor: 'rgba(232,119,34,0.7)' },
+      { label: 'Tout optimiste',  data: diagOpti, backgroundColor: 'rgba(29,158,117,0.7)' },
+    ]},
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { x: { ticks: { font: { size: 10 } } }, y: { ticks: { callback: v => Math.round(v).toLocaleString('fr-FR') + ' €' } } } }
+  });
+
+  // Graphique 2 : impact charges vs participants (marge totale par axe)
+  const partMarges = ['pess','moy','opti'].map(ps => Math.round(totals[ps]['m'].marge));
+  const chargeMarges = ['p','m','o'].map(cs => Math.round(totals['moy'][cs].marge));
+  chartImpact = new Chart(document.getElementById('chart-impact'), {
+    type: 'bar',
+    data: {
+      labels: ['Pess.', 'Moyen', 'Opti.'],
+      datasets: [
+        { label: 'Variation participants (charges moy.)', data: partMarges, backgroundColor: ['rgba(226,75,74,0.7)','rgba(232,119,34,0.7)','rgba(29,158,117,0.7)'] },
+        { label: 'Variation charges (participants moy.)', data: chargeMarges, backgroundColor: ['rgba(226,75,74,0.3)','rgba(232,119,34,0.3)','rgba(29,158,117,0.3)'], borderWidth: 2, borderColor: ['#E24B4A','#E87722','#1D9E75'] },
+      ]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => Math.round(v).toLocaleString('fr-FR') + ' €' } } } }
+  });
+}
+
+buildInputs();
+calc();
+</script>
+</body>
+</html>
