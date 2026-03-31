@@ -208,10 +208,13 @@ footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted)
           <input type="number" id="obj_marge" value="10000" oninput="calc()" style="padding:7px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;font-weight:600;color:var(--orange);width:160px;">
         </div>
       </div>
-      <div class="period-switcher">
-        <button class="period-btn active" onclick="setPeriod('mois')">Mois en cours</button>
-        <button class="period-btn" onclick="setPeriod('trimestre')">Trimestre</button>
-        <button class="period-btn" onclick="setPeriod('annee')">Année</button>
+      <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;">
+        <div id="period-selectors"></div>
+        <div class="period-switcher">
+          <button class="period-btn active" onclick="setPeriod('mois')">Mensuel</button>
+          <button class="period-btn" onclick="setPeriod('trimestre')">Trimestriel</button>
+          <button class="period-btn" onclick="setPeriod('annee')">Annuel</button>
+        </div>
       </div>
     </div>
   </div>
@@ -307,6 +310,39 @@ const MOIS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Ao�
 const F_DEFAULTS = { n1:[5,7,10], n2gpt:[4,6,8], n2cl:[4,6,8], rs:[5,7,9], crea:[3,5,7], notion:[4,6,8] };
 
 let period = 'mois';
+let selectedYear = null;
+let selectedMonth = null;
+
+function initPeriodSelectors() {
+  const allSessions = JSON.parse(localStorage.getItem('aideo_sessions') || '[]');
+  const now = new Date();
+  // Récupérer toutes les années disponibles
+  const years = [...new Set(allSessions.map(s => parseInt(s.date.split('-')[0])))].sort();
+  if (years.length === 0) years.push(now.getFullYear());
+  selectedYear = years.includes(now.getFullYear()) ? now.getFullYear() : years[years.length-1];
+  selectedMonth = now.getMonth();
+
+  // Créer les sélecteurs
+  const container = document.getElementById('period-selectors');
+  const yearOpts = years.map(y => '<option value="'+y+'"'+(y===selectedYear?' selected':'')+'>'+y+'</option>').join('');
+  const monthOpts = MOIS_FR.map((m,i) => '<option value="'+i+'"'+(i===selectedMonth?' selected':'')+'>'+m+'</option>').join('');
+
+  container.innerHTML = '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">' +
+    '<div style="display:flex;flex-direction:column;gap:3px;"><label style="font-size:11px;color:var(--muted);font-weight:500;">Année</label>' +
+    '<select id="sel-year" onchange="onYearChange(this.value)" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;">'+yearOpts+'</select></div>' +
+    '<div id="month-selector" style="display:flex;flex-direction:column;gap:3px;"><label style="font-size:11px;color:var(--muted);font-weight:500;">Mois</label>' +
+    '<select id="sel-month" onchange="onMonthChange(this.value)" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;">'+monthOpts+'</select></div>' +
+    '</div>';
+  updateMonthSelectorVisibility();
+}
+
+function onYearChange(y) { selectedYear = parseInt(y); calc(); }
+function onMonthChange(m) { selectedMonth = parseInt(m); calc(); }
+
+function updateMonthSelectorVisibility() {
+  const ms = document.getElementById('month-selector');
+  if (ms) ms.style.display = period === 'annee' ? 'none' : 'flex';
+}
 let chartDiag = null, chartImpact = null;
 
 // Build participant inputs
@@ -344,27 +380,40 @@ function calcOne(session, partSc, chargeSc) {
 function setPeriod(p) {
   period = p;
   document.querySelectorAll('.period-btn').forEach((b,i) => b.classList.toggle('active', ['mois','trimestre','annee'][i] === p));
+  updateMonthSelectorVisibility();
   calc();
 }
 
 function filterSessions(sessions) {
   const now = new Date();
-  const y = now.getFullYear(), m = now.getMonth();
+  // Détecter l année et le mois à partir des sessions si possible
+  const allYears = sessions.map(s => parseInt(s.date.split('-')[0]));
+  const allMonths = sessions.map(s => parseInt(s.date.split('-')[1]));
+  const targetYear = selectedYear || now.getFullYear();
+  const targetMonth = selectedMonth !== null ? selectedMonth : now.getMonth();
+
   if (period === 'mois') {
-    return sessions.filter(s => { const [sy,sm] = s.date.split('-'); return parseInt(sy)===y && parseInt(sm)===m+1; });
+    return sessions.filter(s => {
+      const [sy,sm] = s.date.split('-');
+      return parseInt(sy)===targetYear && parseInt(sm)===targetMonth+1;
+    });
   } else if (period === 'trimestre') {
-    const trimStart = Math.floor(m/3)*3;
-    return sessions.filter(s => { const [sy,sm] = s.date.split('-'); return parseInt(sy)===y && parseInt(sm)-1>=trimStart && parseInt(sm)-1<=trimStart+2; });
+    const trimStart = Math.floor(targetMonth/3)*3;
+    return sessions.filter(s => {
+      const [sy,sm] = s.date.split('-');
+      return parseInt(sy)===targetYear && parseInt(sm)-1>=trimStart && parseInt(sm)-1<=trimStart+2;
+    });
   } else {
-    return sessions.filter(s => { const [sy] = s.date.split('-'); return parseInt(sy)===y; });
+    return sessions.filter(s => { const [sy] = s.date.split('-'); return parseInt(sy)===targetYear; });
   }
 }
 
 function getPeriodLabel() {
-  const now = new Date();
-  if (period === 'mois') return MOIS_FR[now.getMonth()] + ' ' + now.getFullYear();
-  if (period === 'trimestre') return 'T' + (Math.floor(now.getMonth()/3)+1) + ' ' + now.getFullYear();
-  return 'Année ' + now.getFullYear();
+  const targetYear = selectedYear || new Date().getFullYear();
+  const targetMonth = selectedMonth !== null ? selectedMonth : new Date().getMonth();
+  if (period === 'mois') return MOIS_FR[targetMonth] + ' ' + targetYear;
+  if (period === 'trimestre') return 'T' + (Math.floor(targetMonth/3)+1) + ' ' + targetYear;
+  return 'Année ' + targetYear;
 }
 
 function calc() {
@@ -506,6 +555,7 @@ function drawCharts(sessions, totals, obj) {
 }
 
 buildInputs();
+initPeriodSelectors();
 calc();
 </script>
 </body>
