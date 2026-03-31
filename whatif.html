@@ -173,8 +173,11 @@ footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted)
               <th>Formation</th>
               <th>Durée</th>
               <th class="sc pess-h">▼ Pessimiste</th>
+              <th class="sc" style="color:#aaa;font-size:10px;">Annulée</th>
               <th class="sc moy-h">◆ Moyen</th>
+              <th class="sc" style="color:#aaa;font-size:10px;">Annulée</th>
               <th class="sc opti-h">▲ Optimiste</th>
+              <th class="sc" style="color:#aaa;font-size:10px;">Annulée</th>
             </tr>
           </thead>
           <tbody id="sessions-tbody"></tbody>
@@ -280,13 +283,14 @@ function getCharge(sc) {
   };
 }
 
-function calcSession(s, n, sc) {
+function calcSession(s, n, sc, cancelled) {
+  if (cancelled) return { ca: 0, charges: 0, marge: 0, cancelled: true };
   const f = FORMATIONS[s.formation];
   const c = getCharge(sc);
   const j = f.jours;
   const ca = n * c.prix * j;
   const charges = (c.loyer * j) + (c.repas * j) + c.pub + (n * c.admin) + (ca * c.qual);
-  return { ca, charges, marge: ca - charges };
+  return { ca, charges, marge: ca - charges, cancelled: false };
 }
 
 // Init sélecteurs année/mois
@@ -350,7 +354,7 @@ function filterSessions() {
       // Valeurs par défaut selon la formation
       const defaults = { n1:[5,7,10], n2gpt:[4,6,8], n2cl:[4,6,8], rs:[5,7,9], crea:[3,5,7], notion:[4,6,8] };
       const d = defaults[s.formation] || [5,7,10];
-      participants[key] = { p: d[0], m: d[1], o: d[2] };
+      participants[key] = { p: d[0], m: d[1], o: d[2], cancelled_p: false, cancelled_m: false, cancelled_o: false };
     }
   });
 }
@@ -366,15 +370,26 @@ function buildSessionsTable() {
     const f = FORMATIONS[s.formation];
     const key = s.date + '_' + s.formation;
     const p = participants[key];
-    return `<tr>
+    const rowStyle = (p.cancelled_p && p.cancelled_m && p.cancelled_o) ? 'opacity:.4;' : '';
+    return `<tr style="${rowStyle}">
       <td class="date-cell">${fmtDate(s.date)}</td>
       <td><span class="f-badge" style="background:${f.color}22;color:${f.color}">${f.label}</span></td>
       <td style="color:var(--muted);font-size:12px;">${f.jours}j</td>
-      <td class="sc-cell"><input type="number" class="pess-in" value="${p.p}" min="1" max="30" oninput="onPartChange('${key}','p',this.value)"></td>
-      <td class="sc-cell"><input type="number" class="moy-in" value="${p.m}" min="1" max="30" oninput="onPartChange('${key}','m',this.value)"></td>
-      <td class="sc-cell"><input type="number" class="opti-in" value="${p.o}" min="1" max="30" oninput="onPartChange('${key}','o',this.value)"></td>
+      <td class="sc-cell"><input type="number" class="pess-in" value="${p.p}" min="1" max="30" oninput="onPartChange('${key}','p',this.value)" ${p.cancelled_p?'disabled style="opacity:.3;"':''}></td>
+      <td class="sc-cell" title="Annuler pour ce scénario"><input type="checkbox" ${p.cancelled_p?'checked':''} onchange="onCancel('${key}','p',this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:var(--pess);"></td>
+      <td class="sc-cell"><input type="number" class="moy-in" value="${p.m}" min="1" max="30" oninput="onPartChange('${key}','m',this.value)" ${p.cancelled_m?'disabled style="opacity:.3;"':''}></td>
+      <td class="sc-cell" title="Annuler pour ce scénario"><input type="checkbox" ${p.cancelled_m?'checked':''} onchange="onCancel('${key}','m',this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:var(--moy);"></td>
+      <td class="sc-cell"><input type="number" class="opti-in" value="${p.o}" min="1" max="30" oninput="onPartChange('${key}','o',this.value)" ${p.cancelled_o?'disabled style="opacity:.3;"':''}></td>
+      <td class="sc-cell" title="Annuler pour ce scénario"><input type="checkbox" ${p.cancelled_o?'checked':''} onchange="onCancel('${key}','o',this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:var(--opti);"></td>
     </tr>`;
   }).join('');
+}
+
+function onCancel(key, sc, checked) {
+  if (!participants[key]) return;
+  participants[key]['cancelled_' + sc] = checked;
+  buildSessionsTable();
+  renderResults();
 }
 
 function onPartChange(key, sc, val) {
@@ -410,7 +425,8 @@ function renderResults() {
       filteredSessions.forEach(s => {
         const key = s.date + '_' + s.formation;
         const n = participants[key]?.[ps] || 5;
-        const r = calcSession(s, n, cs);
+        const cancelled = participants[key]?.['cancelled_' + ps] || false;
+        const r = calcSession(s, n, cs, cancelled);
         tCA += r.ca; tCh += r.charges;
       });
       totals[ps][cs] = { ca: tCA, charges: tCh, marge: tCA - tCh };
@@ -460,7 +476,14 @@ function renderResults() {
     const key = s.date + '_' + s.formation;
     const cells = SC.map((sc, si) => {
       const n = participants[key]?.[sc] || 5;
-      const r = calcSession(s, n, sc);
+      const cancelled = participants[key]?.['cancelled_' + sc] || false;
+      const r = calcSession(s, n, sc, cancelled);
+      if (cancelled) {
+        return `<td style="border-left:2px solid ${SC_COLORS[si]}22;background:#F5F5F5;">
+          <div style="color:#aaa;font-size:12px;font-style:italic;">🚫 Annulée</div>
+          <div class="result-sub">0 € CA · 0 € charges</div>
+        </td>`;
+      }
       return `<td style="border-left:2px solid ${SC_COLORS[si]}22;">
         <div class="result-val ${r.marge>=0?'pos':'neg'}">${eur(r.marge)}</div>
         <div class="result-sub">${n} pers · ${eur(r.ca)} CA</div>
@@ -556,7 +579,8 @@ function drawCharts(sessions, totals) {
         data: sessions.map(s => {
           const key = s.date + '_' + s.formation;
           const n = participants[key]?.[sc] || 5;
-          return Math.round(calcSession(s, n, sc).marge);
+          const cancelled = participants[key]?.['cancelled_' + sc] || false;
+          return Math.round(calcSession(s, n, sc, cancelled).marge);
         }),
         backgroundColor: SC_COLORS[si] + 'BB',
         borderColor: SC_COLORS[si],
