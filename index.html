@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIDEO — Simulateurs Rentabilité</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #F7F7F5; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+  .container { max-width: 600px; text-align: center; padding: 40px 24px; }
+  .logo { font-size: 32px; font-weight: 700; color: #E87722; margin-bottom: 8px; }
+  .sub { font-size: 16px; color: #6B6B6B; margin-bottom: 48px; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card { background: #fff; border: 1px solid #E0DDD8; border-radius: 12px; padding: 24px 16px; text-decoration: none; color: #1A1A1A; transition: all .2s; }
+  .card:hover { border-color: #E87722; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(232,119,34,.15); }
+  .card-icon { font-size: 28px; margin-bottom: 12px; }
+  .card-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .card-desc { font-size: 12px; color: #6B6B6B; line-height: 1.5; }
+  footer { margin-top: 48px; font-size: 12px; color: #6B6B6B; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">AIDEO</div>
+  <div class="sub">Simulateurs de rentabilité — Formations IA</div>
+  <div class="cards">
+    <a class="card" href="simulateur-1j.html">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Simulateur 1 journée</div>
+      <div class="card-desc">Rentabilité par scénario (5, 7, 10 stagiaires)</div>
+    </a>
+    <a class="card" href="simulateur-mj.html">
+      <div class="card-icon">📅</div>
+      <div class="card-title">Simulateur multi-jours</div>
+      <div class="card-desc">Formations sur 1, 2 ou 3 jours avec charges adaptées</div>
+    </a>
+    <a class="card" href="agenda.html">
+      <div class="card-icon">🗓️</div>
+      <div class="card-title">Agenda prévisionnel</div>
+      <div class="card-desc">CA et marge mensuelle et trimestrielle</div>
+    </a>
+  </div>
+  <footer>Frédéric Ruault — contact@aideo.fr — aideo.fr</footer>
+</div>
+</body>
+</html>
