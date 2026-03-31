@@ -7,23 +7,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --orange: #E87722;
-    --turquoise: #00A99D;
-    --bg: #F7F7F5;
-    --white: #FFFFFF;
-    --text: #1A1A1A;
-    --muted: #6B6B6B;
-    --border: #E0DDD8;
-    --green: #0F6E56;
-    --red: #993C1D;
-    --radius: 10px;
-  }
+  :root { --orange: #E87722; --turquoise: #00A99D; --bg: #F7F7F5; --white: #FFFFFF; --text: #1A1A1A; --muted: #6B6B6B; --border: #E0DDD8; --green: #0F6E56; --red: #993C1D; --radius: 10px; }
   body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
   header { background: var(--white); border-bottom: 1px solid var(--border); padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
   header h1 { font-size: 18px; font-weight: 600; color: var(--orange); }
   header span { font-size: 13px; color: var(--muted); }
-  nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 32px; display: flex; gap: 0; }
+  nav { background: var(--white); border-bottom: 1px solid var(--border); padding: 0 32px; display: flex; }
   nav a { display: inline-block; padding: 12px 20px; font-size: 14px; color: var(--muted); text-decoration: none; border-bottom: 3px solid transparent; transition: all .2s; }
   nav a:hover { color: var(--orange); }
   nav a.active { color: var(--orange); border-bottom-color: var(--orange); font-weight: 500; }
@@ -38,9 +27,15 @@
   .param-item input { padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; color: var(--text); background: var(--white); width: 100%; }
   .param-item input:focus { outline: none; border-color: var(--orange); }
   .param-item .hint { font-size: 11px; color: var(--muted); }
+  .scenarios-bar { display: flex; gap: 16px; align-items: flex-end; margin-bottom: 20px; flex-wrap: wrap; }
+  .scenario-input { display: flex; flex-direction: column; gap: 4px; }
+  .scenario-input label { font-size: 11px; font-weight: 600; color: var(--orange); text-transform: uppercase; letter-spacing: .04em; }
+  .scenario-input input { width: 90px; padding: 7px 10px; border: 2px solid var(--orange); border-radius: 6px; font-size: 15px; font-weight: 600; color: var(--orange); text-align: center; background: #FFF8F4; }
+  .scenario-input input:focus { outline: none; border-color: var(--turquoise); color: var(--turquoise); }
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
   thead th { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; padding: 8px 16px; border-bottom: 2px solid var(--border); text-align: right; }
   thead th:first-child { text-align: left; }
+  thead th.sc-header { color: var(--orange); }
   tbody td { padding: 10px 16px; border-bottom: 1px solid var(--border); text-align: right; }
   tbody td:first-child { text-align: left; color: var(--muted); font-size: 13px; }
   tr.separator td { border-top: 2px solid var(--orange); }
@@ -50,115 +45,98 @@
   tr.taux-row td { color: var(--muted); font-size: 12px; font-style: italic; }
   .positive { color: var(--green); }
   .negative { color: var(--red); }
-  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .charts-section { margin-bottom: 24px; }
+  .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
   .chart-box { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
-  .chart-box h3 { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 16px; }
+  .chart-box h3 { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 12px; }
   .chart-wrap { position: relative; height: 220px; }
+  .donuts-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .donut-box { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; }
+  .donut-box h3 { font-size: 12px; font-weight: 600; color: var(--orange); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 8px; }
+  .donut-wrap { position: relative; height: 180px; }
+  .donut-legend { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+  .donut-legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); justify-content: flex-start; }
+  .donut-legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
   .legend { display: flex; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
   .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
   .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
   footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 32px; }
-  @media (max-width: 700px) {
-    .params-grid { grid-template-columns: 1fr 1fr; }
-    .charts-grid { grid-template-columns: 1fr; }
-    header { padding: 12px 16px; }
-    .main { padding: 16px; }
-    nav { padding: 0 16px; overflow-x: auto; }
-  }
+  @media (max-width: 700px) { .params-grid { grid-template-columns: 1fr 1fr; } .charts-row { grid-template-columns: 1fr; } .donuts-row { grid-template-columns: 1fr; } header { padding: 12px 16px; } .main { padding: 16px; } nav { padding: 0 16px; overflow-x: auto; } }
 </style>
 </head>
 <body>
-<header>
-  <h1>AIDEO — Simulateurs Rentabilité</h1>
-  <span>Formations IA</span>
-</header>
+<header><h1>AIDEO — Simulateurs Rentabilité</h1><span>Formations IA</span></header>
 <nav>
   <a href="simulateur-1j.html" class="active">1 Journée</a>
   <a href="simulateur-mj.html">Multi-jours</a>
   <a href="agenda.html">Agenda prévisionnel</a>
 </nav>
-
 <div class="main">
   <div class="page-title">Simulateur — 1 Journée de formation</div>
-  <div class="page-sub">Visualisez la rentabilité selon le nombre de stagiaires. Tous les paramètres sont modifiables.</div>
+  <div class="page-sub">Visualisez la rentabilité selon 3 scénarios personnalisables. Modifiez le nombre de participants et les paramètres.</div>
+
+  <div class="card">
+    <div class="card-title">Nombre de participants par scénario</div>
+    <div class="scenarios-bar">
+      <div class="scenario-input"><label>Scénario A</label><input type="number" id="sc1" value="5" min="1" max="50" oninput="calc()"></div>
+      <div class="scenario-input"><label>Scénario B</label><input type="number" id="sc2" value="7" min="1" max="50" oninput="calc()"></div>
+      <div class="scenario-input"><label>Scénario C</label><input type="number" id="sc3" value="10" min="1" max="50" oninput="calc()"></div>
+    </div>
+  </div>
 
   <div class="card">
     <div class="card-title">Paramètres de la session</div>
     <div class="params-grid">
-      <div class="param-item">
-        <label>Prix de vente HT / pers / jour (€)</label>
-        <input type="number" id="prix" value="350" min="0" oninput="calc()">
-        <span class="hint">Tarif appliqué à chaque stagiaire</span>
-      </div>
-      <div class="param-item">
-        <label>Loyer HT / jour (€)</label>
-        <input type="number" id="loyer" value="250" min="0" oninput="calc()">
-        <span class="hint">Location salle par journée</span>
-      </div>
-      <div class="param-item">
-        <label>Repas perso / jour (€)</label>
-        <input type="number" id="repas" value="25" min="0" oninput="calc()">
-        <span class="hint">Votre repas (sans TVA)</span>
-      </div>
-      <div class="param-item">
-        <label>Pub HT / session (€)</label>
-        <input type="number" id="pub" value="100" min="0" oninput="calc()">
-        <span class="hint">Budget publicité (charge fixe)</span>
-      </div>
-      <div class="param-item">
-        <label>Admin / stagiaire (€)</label>
-        <input type="number" id="admin" value="0" min="0" oninput="calc()">
-        <span class="hint">Coût administratif unitaire</span>
-      </div>
-      <div class="param-item">
-        <label>Qualiopi (% du CA HT)</label>
-        <input type="number" id="qualiopi" value="10" min="0" max="100" oninput="calc()">
-        <span class="hint">Provision certification qualité</span>
-      </div>
+      <div class="param-item"><label>Prix de vente HT / pers / jour (€)</label><input type="number" id="prix" value="350" min="0" oninput="calc()"><span class="hint">Tarif appliqué à chaque stagiaire</span></div>
+      <div class="param-item"><label>Loyer HT / jour (€)</label><input type="number" id="loyer" value="250" min="0" oninput="calc()"><span class="hint">Location salle par journée</span></div>
+      <div class="param-item"><label>Repas perso / jour (€)</label><input type="number" id="repas" value="25" min="0" oninput="calc()"><span class="hint">Votre repas (sans TVA)</span></div>
+      <div class="param-item"><label>Pub HT / session (€)</label><input type="number" id="pub" value="100" min="0" oninput="calc()"><span class="hint">Budget publicité (charge fixe)</span></div>
+      <div class="param-item"><label>Admin / stagiaire (€)</label><input type="number" id="admin" value="0" min="0" oninput="calc()"><span class="hint">Coût administratif unitaire</span></div>
+      <div class="param-item"><label>Qualiopi (% du CA HT)</label><input type="number" id="qualiopi" value="10" min="0" max="100" oninput="calc()"><span class="hint">Provision certification qualité</span></div>
     </div>
   </div>
 
   <div class="card">
-    <div class="card-title">Tableau de rentabilité — 1 journée</div>
-    <table>
-      <thead>
-        <tr>
-          <th>Poste</th>
-          <th>5 stagiaires</th>
-          <th>7 stagiaires</th>
-          <th>10 stagiaires</th>
-        </tr>
-      </thead>
-      <tbody id="tbody"></tbody>
-    </table>
+    <div class="card-title">Tableau de rentabilité</div>
+    <table><thead><tr><th>Poste</th><th class="sc-header" id="th1">Scén. A</th><th class="sc-header" id="th2">Scén. B</th><th class="sc-header" id="th3">Scén. C</th></tr></thead>
+    <tbody id="tbody"></tbody></table>
   </div>
 
-  <div class="charts-grid">
-    <div class="chart-box">
-      <h3>CA vs Charges (€ HT)</h3>
-      <div class="legend">
-        <div class="legend-item"><div class="legend-dot" style="background:#378ADD"></div>CA HT</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div>Charges HT</div>
+  <div class="charts-section">
+    <div class="charts-row">
+      <div class="chart-box">
+        <h3>CA vs Charges (€ HT)</h3>
+        <div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#378ADD"></div>CA HT</div><div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div>Charges HT</div></div>
+        <div class="chart-wrap"><canvas id="chart1"></canvas></div>
       </div>
-      <div class="chart-wrap"><canvas id="chart1"></canvas></div>
+      <div class="chart-box">
+        <h3>Marge brute (€ HT)</h3>
+        <div class="chart-wrap"><canvas id="chart2"></canvas></div>
+      </div>
     </div>
-    <div class="chart-box">
-      <h3>Marge brute (€ HT)</h3>
-      <div class="chart-wrap"><canvas id="chart2"></canvas></div>
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:24px;">
+      <div style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:16px;">Répartition des charges par scénario</div>
+      <div class="donuts-row" id="donuts-container"></div>
     </div>
   </div>
 </div>
-
 <footer>AIDEO © 2026 — Frédéric Ruault — contact@aideo.fr</footer>
-
 <script>
-let c1, c2;
+let c1, c2, donutCharts = [];
 function v(id) { return parseFloat(document.getElementById(id).value) || 0; }
 function eur(n) { return Math.round(n).toLocaleString('fr-FR') + ' €'; }
 
+const CHARGE_COLORS = ['#378ADD','#E87722','#00A99D','#9B3DA5','#D85A30'];
+const CHARGE_LABELS = ['Loyer','Repas','Pub','Admin','Qualiopi'];
+
 function calc() {
   const prix = v('prix'), loyer = v('loyer'), repas = v('repas'), pub = v('pub'), admin = v('admin'), qPct = v('qualiopi') / 100;
-  const sc = [5, 7, 10];
+  const sc = [v('sc1'), v('sc2'), v('sc3')];
+  
+  document.getElementById('th1').textContent = sc[0] + ' pers';
+  document.getElementById('th2').textContent = sc[1] + ' pers';
+  document.getElementById('th3').textContent = sc[2] + ' pers';
+
   const ca = sc.map(n => n * prix);
   const cLoyer = sc.map(() => loyer);
   const cRepas = sc.map(() => repas);
@@ -171,9 +149,9 @@ function calc() {
 
   const rows = [
     { label: 'CA HT', vals: ca, cls: 'ca-row' },
-    { label: '— Loyer (charge fixe)', vals: cLoyer },
+    { label: '— Loyer (fixe)', vals: cLoyer },
     { label: '— Repas perso', vals: cRepas },
-    { label: '— Pub (charge fixe)', vals: cPub },
+    { label: '— Pub (fixe)', vals: cPub },
     { label: '— Admin (× stagiaires)', vals: cAdmin },
     { label: '— Qualiopi (' + v('qualiopi') + '% CA)', vals: cQual },
     { label: 'Total charges HT', vals: total, cls: 'total separator' },
@@ -182,22 +160,17 @@ function calc() {
   ];
 
   document.getElementById('tbody').innerHTML = rows.map(r => {
-    const cells = r.vals.map((val, i) => {
+    const cells = r.vals.map(val => {
       let display = r.pct ? val + ' %' : eur(val);
-      let style = '';
-      if (r.cls && r.cls.includes('marge-row')) {
-        style = val >= 0 ? 'class="positive"' : 'class="negative"';
-      }
-      if (r.cls && r.cls.includes('taux-row')) {
-        style = val >= 0 ? 'class="positive"' : 'class="negative"';
-      }
-      return `<td ${style}>${display}</td>`;
+      let cls = '';
+      if (r.cls && (r.cls.includes('marge-row') || r.cls.includes('taux-row'))) cls = val >= 0 ? 'positive' : 'negative';
+      return `<td class="${cls}">${display}</td>`;
     }).join('');
-    const cls = r.cls || '';
-    return `<tr class="${cls}"><td>${r.label}</td>${cells}</tr>`;
+    return `<tr class="${r.cls || ''}"><td>${r.label}</td>${cells}</tr>`;
   }).join('');
 
   drawCharts(sc, ca, total, marge);
+  drawDonuts(sc, cLoyer, cRepas, cPub, cAdmin, cQual);
 }
 
 function drawCharts(sc, ca, total, marge) {
@@ -205,19 +178,41 @@ function drawCharts(sc, ca, total, marge) {
   if (c1) c1.destroy();
   if (c2) c2.destroy();
   c1 = new Chart(document.getElementById('chart1'), {
-    type: 'bar',
-    data: { labels: lbls, datasets: [
-      { label: 'CA HT', data: ca, backgroundColor: '#378ADD' },
-      { label: 'Charges HT', data: total, backgroundColor: '#E24B4A' }
-    ]},
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-      scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => Math.round(v).toLocaleString('fr-FR') + ' €' } } } }
+    type: 'bar', data: { labels: lbls, datasets: [{ label: 'CA HT', data: ca, backgroundColor: '#378ADD' }, { label: 'Charges HT', data: total, backgroundColor: '#E24B4A' }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => Math.round(v).toLocaleString('fr-FR') + ' €' } } } }
   });
   c2 = new Chart(document.getElementById('chart2'), {
-    type: 'bar',
-    data: { labels: lbls, datasets: [{ label: 'Marge', data: marge, backgroundColor: marge.map(m => m >= 0 ? '#1D9E75' : '#D85A30') }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-      scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => Math.round(v).toLocaleString('fr-FR') + ' €' } } } }
+    type: 'bar', data: { labels: lbls, datasets: [{ label: 'Marge', data: marge, backgroundColor: marge.map(m => m >= 0 ? '#1D9E75' : '#D85A30') }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => Math.round(v).toLocaleString('fr-FR') + ' €' } } } }
+  });
+}
+
+function drawDonuts(sc, cLoyer, cRepas, cPub, cAdmin, cQual) {
+  donutCharts.forEach(c => c.destroy());
+  donutCharts = [];
+  const container = document.getElementById('donuts-container');
+  container.innerHTML = '';
+  
+  sc.forEach((n, i) => {
+    const vals = [cLoyer[i], cRepas[i], cPub[i], cAdmin[i], cQual[i]];
+    const totalCharges = vals.reduce((a, b) => a + b, 0);
+    const box = document.createElement('div');
+    box.className = 'donut-box';
+    box.innerHTML = `<h3>${n} stagiaires</h3><div class="donut-wrap"><canvas id="donut${i}"></canvas></div><div class="donut-legend" id="dleg${i}"></div>`;
+    container.appendChild(box);
+    
+    const chart = new Chart(document.getElementById('donut' + i), {
+      type: 'doughnut',
+      data: { labels: CHARGE_LABELS, datasets: [{ data: vals, backgroundColor: CHARGE_COLORS, borderWidth: 2, borderColor: '#fff' }] },
+      options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ctx.label + ' : ' + eur(ctx.raw) + ' (' + (totalCharges > 0 ? Math.round(ctx.raw / totalCharges * 100) : 0) + '%)' } } } }
+    });
+    donutCharts.push(chart);
+    
+    const leg = document.getElementById('dleg' + i);
+    CHARGE_LABELS.forEach((lbl, j) => {
+      const pct = totalCharges > 0 ? Math.round(vals[j] / totalCharges * 100) : 0;
+      if (vals[j] > 0) leg.innerHTML += `<div class="donut-legend-item"><div class="donut-legend-dot" style="background:${CHARGE_COLORS[j]}"></div>${lbl} ${pct}%</div>`;
+    });
   });
 }
 calc();

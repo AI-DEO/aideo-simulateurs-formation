@@ -7,11 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --orange: #E87722; --turquoise: #00A99D; --bg: #F7F7F5; --white: #FFFFFF;
-    --text: #1A1A1A; --muted: #6B6B6B; --border: #E0DDD8;
-    --green: #0F6E56; --red: #993C1D; --radius: 10px;
-  }
+  :root { --orange: #E87722; --turquoise: #00A99D; --bg: #F7F7F5; --white: #FFFFFF; --text: #1A1A1A; --muted: #6B6B6B; --border: #E0DDD8; --green: #0F6E56; --red: #993C1D; --radius: 10px; }
   body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
   header { background: var(--white); border-bottom: 1px solid var(--border); padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
   header h1 { font-size: 18px; font-weight: 600; color: var(--orange); }
@@ -22,7 +18,7 @@
   .main { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
   .page-title { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
   .page-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
-  .layout { display: grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start; }
+  .layout { display: grid; grid-template-columns: 300px 1fr; gap: 24px; align-items: start; }
   .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
   .card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 14px; }
   .param-item { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
@@ -30,7 +26,7 @@
   .param-item input, .param-item select { padding: 7px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; color: var(--text); background: var(--white); width: 100%; }
   .param-item input:focus, .param-item select:focus { outline: none; border-color: var(--orange); }
   .period-switcher { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
-  .period-btn { flex: 1; padding: 10px; text-align: center; font-size: 14px; font-weight: 500; cursor: pointer; background: var(--white); border: none; color: var(--muted); transition: all .2s; }
+  .period-btn { flex: 1; padding: 10px 6px; text-align: center; font-size: 13px; font-weight: 500; cursor: pointer; background: var(--white); border: none; color: var(--muted); transition: all .2s; }
   .period-btn.active { background: var(--orange); color: #fff; }
   .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
   .cal-nav { display: flex; align-items: center; gap: 12px; }
@@ -39,142 +35,129 @@
   .cal-nav h2 { font-size: 16px; font-weight: 600; min-width: 200px; text-align: center; }
   .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
   .cal-day-name { text-align: center; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; padding: 6px 0; }
-  .cal-day { min-height: 72px; border: 1px solid var(--border); border-radius: 6px; padding: 6px; cursor: pointer; background: var(--white); transition: all .2s; position: relative; }
+  .cal-day { min-height: 72px; border: 1px solid var(--border); border-radius: 6px; padding: 6px; cursor: pointer; background: var(--white); transition: all .2s; }
   .cal-day:hover { border-color: var(--orange); background: #FFF8F4; }
   .cal-day.empty { background: var(--bg); cursor: default; border-color: transparent; }
   .cal-day.today { border-color: var(--orange); border-width: 2px; }
   .cal-day.has-session { background: #F0FAF8; border-color: var(--turquoise); }
-  .cal-day.has-session:hover { background: #E0F5F3; }
   .day-num { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
   .cal-day.today .day-num { color: var(--orange); }
-  .session-badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; background: var(--turquoise); color: #fff; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+  .session-badge { font-size: 10px; padding: 2px 5px; border-radius: 4px; background: var(--turquoise); color: #fff; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .session-badge.day2 { background: #888; opacity: .7; font-style: italic; }
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 100; align-items: center; justify-content: center; }
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 100; align-items: center; justify-content: center; }
   .modal-overlay.open { display: flex; }
-  .modal { background: var(--white); border-radius: var(--radius); padding: 28px; width: 440px; max-width: 95vw; position: relative; max-height: 90vh; overflow-y: auto; }
-  .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 20px; color: var(--orange); }
+  .modal { background: var(--white); border-radius: var(--radius); padding: 28px; width: 460px; max-width: 95vw; position: relative; max-height: 90vh; overflow-y: auto; }
+  .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: var(--orange); }
+  .modal-date { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
   .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 20px; cursor: pointer; color: var(--muted); }
   .modal-field { margin-bottom: 14px; }
   .modal-field label { display: block; font-size: 12px; font-weight: 500; color: var(--muted); margin-bottom: 5px; }
   .modal-field select, .modal-field input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; color: var(--text); }
   .modal-field select:focus, .modal-field input:focus { outline: none; border-color: var(--orange); }
   .modal-preview { background: #F7F7F5; border-radius: 8px; padding: 14px; margin: 16px 0; }
-  .modal-preview .preview-row { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
-  .modal-preview .preview-row.total { font-weight: 700; border-top: 1px solid var(--border); margin-top: 6px; padding-top: 6px; }
-  .modal-preview .preview-row.marge { font-weight: 700; font-size: 15px; }
+  .preview-row { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
+  .preview-row.total { font-weight: 700; border-top: 1px solid var(--border); margin-top: 6px; padding-top: 6px; }
+  .preview-row.marge { font-weight: 700; font-size: 15px; }
   .btn-primary { width: 100%; padding: 10px; background: var(--orange); color: #fff; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 8px; }
   .btn-primary:hover { opacity: .9; }
-  .btn-delete { width: 100%; padding: 8px; background: #fff; color: var(--red); border: 1px solid var(--red); border-radius: 6px; font-size: 13px; cursor: pointer; margin-top: 8px; }
+  .btn-secondary { width: 100%; padding: 9px; background: var(--white); color: var(--turquoise); border: 1px solid var(--turquoise); border-radius: 6px; font-size: 13px; cursor: pointer; margin-top: 8px; font-weight: 500; }
+  .btn-secondary:hover { background: #F0FAF8; }
+  .btn-delete { width: 100%; padding: 8px; background: var(--white); color: var(--red); border: 1px solid var(--red); border-radius: 6px; font-size: 13px; cursor: pointer; margin-top: 8px; }
   .btn-delete:hover { background: #FFF5F3; }
-  .synthese-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
-  .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; }
-  .stat-card .stat-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-  .stat-card .stat-value { font-size: 22px; font-weight: 700; }
+  .date-picker-row { display: none; background: #F0FAF8; border-radius: 8px; padding: 12px; margin-top: 8px; }
+  .date-picker-row.open { display: block; }
+  .synthese-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
+  .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; text-align: center; }
+  .stat-card .stat-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .stat-card .stat-value { font-size: 20px; font-weight: 700; }
   .stat-card.ca .stat-value { color: #185FA5; }
   .stat-card.charges .stat-value { color: var(--red); }
-  .stat-card.marge .stat-value { color: var(--green); }
-  .sessions-list { margin-top: 16px; }
+  .stat-card.marge .stat-value { }
+  .sessions-list { margin-top: 0; }
   .session-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 13px; cursor: pointer; transition: background .15s; }
   .session-row:hover { background: #FFF8F4; }
-  .session-row .s-date { color: var(--muted); font-size: 12px; min-width: 80px; }
-  .session-row .s-name { flex: 1; padding: 0 12px; font-weight: 500; }
-  .session-row .s-stag { color: var(--muted); font-size: 12px; min-width: 60px; }
-  .session-row .s-marge { font-weight: 700; min-width: 80px; text-align: right; }
-  .session-row .s-marge.pos { color: var(--green); }
-  .session-row .s-marge.neg { color: var(--red); }
+  .s-date { color: var(--muted); font-size: 12px; min-width: 80px; }
+  .s-name { flex: 1; padding: 0 10px; font-weight: 500; }
+  .s-stag { color: var(--muted); font-size: 12px; min-width: 55px; }
+  .s-marge { font-weight: 700; min-width: 80px; text-align: right; }
+  .s-marge.pos { color: var(--green); }
+  .s-marge.neg { color: var(--red); }
   .chart-box { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-top: 20px; }
-  .chart-box h3 { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 14px; }
+  .chart-box h3 { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 12px; }
   .chart-wrap { position: relative; height: 200px; }
-  .trimestre-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .trimestre-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
   .month-card { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
   .month-card h4 { font-size: 13px; font-weight: 600; margin-bottom: 10px; color: var(--orange); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
   .month-stat { display: flex; justify-content: space-between; font-size: 12px; padding: 3px 0; color: var(--muted); }
   .month-stat.marge-line { font-weight: 700; font-size: 13px; color: var(--text); border-top: 1px solid var(--border); margin-top: 4px; padding-top: 6px; }
+  .total-trim-card { background: #FFF8F4; border: 2px solid var(--orange); border-radius: 10px; padding: 18px; margin-top: 4px; }
+  .total-trim-card h4 { font-size: 14px; font-weight: 700; color: var(--orange); margin-bottom: 12px; }
+  .total-trim-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .total-trim-stat { text-align: center; }
+  .total-trim-stat .ttl { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .total-trim-stat .ttv { font-size: 20px; font-weight: 700; }
+  .annual-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .annual-card { background: var(--white); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+  .annual-card h4 { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+  .annual-stat { display: flex; justify-content: space-between; font-size: 11px; padding: 2px 0; color: var(--muted); }
+  .annual-stat.marge-line { font-weight: 700; font-size: 12px; color: var(--text); border-top: 1px solid var(--border); margin-top: 3px; padding-top: 4px; }
+  .annual-card.has-data { border-color: var(--turquoise); }
+  .total-annual-card { background: var(--orange); border-radius: 10px; padding: 18px; margin-top: 4px; grid-column: 1 / -1; }
+  .total-annual-card h4 { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 12px; }
+  .total-annual-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .total-annual-stat { text-align: center; }
+  .total-annual-stat .ttl { font-size: 11px; color: rgba(255,255,255,.75); margin-bottom: 4px; }
+  .total-annual-stat .ttv { font-size: 20px; font-weight: 700; color: #fff; }
   .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 14px; }
   .legend { display: flex; gap: 16px; margin-bottom: 10px; flex-wrap: wrap; }
   .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
   .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
-  @media (max-width: 900px) {
-    .layout { grid-template-columns: 1fr; }
-    .synthese-grid { grid-template-columns: 1fr 1fr; }
-    .trimestre-grid { grid-template-columns: 1fr; }
-  }
-  @media (max-width: 600px) {
-    .synthese-grid { grid-template-columns: 1fr; }
-    .cal-day { min-height: 50px; }
-    .session-badge { display: none; }
-  }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .trimestre-grid { grid-template-columns: 1fr; } .annual-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .synthese-grid { grid-template-columns: 1fr; } .cal-day { min-height: 50px; } }
 </style>
 </head>
 <body>
-<header>
-  <h1>AIDEO — Simulateurs Rentabilité</h1>
-  <span>Formations IA</span>
-</header>
+<header><h1>AIDEO — Simulateurs Rentabilité</h1><span>Formations IA</span></header>
 <nav>
   <a href="simulateur-1j.html">1 Journée</a>
   <a href="simulateur-mj.html">Multi-jours</a>
   <a href="agenda.html" class="active">Agenda prévisionnel</a>
 </nav>
-
 <div class="main">
   <div class="page-title">Agenda prévisionnel</div>
-  <div class="page-sub">Positionnez vos formations sur l'agenda et visualisez votre rentabilité mensuelle et trimestrielle.</div>
-
+  <div class="page-sub">Positionnez vos formations et visualisez votre rentabilité mensuelle, trimestrielle et annuelle.</div>
   <div class="layout">
-    <!-- Colonne gauche : paramètres -->
     <div>
       <div class="card">
         <div class="card-title">Paramètres globaux</div>
-        <div class="param-item">
-          <label>Prix de vente HT / pers / jour (€)</label>
-          <input type="number" id="p_prix" value="350" min="0" oninput="refresh()">
-        </div>
-        <div class="param-item">
-          <label>Loyer unitaire HT / jour (€)</label>
-          <input type="number" id="p_loyer" value="250" min="0" oninput="refresh()">
-        </div>
-        <div class="param-item">
-          <label>Repas perso / jour (€)</label>
-          <input type="number" id="p_repas" value="25" min="0" oninput="refresh()">
-        </div>
-        <div class="param-item">
-          <label>Pub HT / session (€)</label>
-          <input type="number" id="p_pub" value="100" min="0" oninput="refresh()">
-        </div>
-        <div class="param-item">
-          <label>Admin / stagiaire (€)</label>
-          <input type="number" id="p_admin" value="0" min="0" oninput="refresh()">
-        </div>
-        <div class="param-item">
-          <label>Qualiopi (% du CA HT)</label>
-          <input type="number" id="p_qualiopi" value="10" min="0" max="100" oninput="refresh()">
-        </div>
+        <div class="param-item"><label>Prix HT / pers / jour (€)</label><input type="number" id="p_prix" value="350" min="0" oninput="refresh()"></div>
+        <div class="param-item"><label>Loyer unitaire HT / jour (€)</label><input type="number" id="p_loyer" value="250" min="0" oninput="refresh()"></div>
+        <div class="param-item"><label>Repas perso / jour (€)</label><input type="number" id="p_repas" value="25" min="0" oninput="refresh()"></div>
+        <div class="param-item"><label>Pub HT / session (€)</label><input type="number" id="p_pub" value="100" min="0" oninput="refresh()"></div>
+        <div class="param-item"><label>Admin / stagiaire (€)</label><input type="number" id="p_admin" value="0" min="0" oninput="refresh()"></div>
+        <div class="param-item"><label>Qualiopi (% du CA HT)</label><input type="number" id="p_qualiopi" value="10" min="0" max="100" oninput="refresh()"></div>
       </div>
-
       <div class="card">
         <div class="card-title">Formations disponibles</div>
-        <div style="font-size:12px; color:var(--muted); line-height:1.8;">
+        <div style="font-size:12px;color:var(--muted);line-height:2;">
           <div>📘 ChatGPT / Claude N1 — <strong>1j</strong></div>
           <div>📗 ChatGPT N2 — <strong>1j</strong></div>
           <div>📙 Claude N2 — <strong>1j</strong></div>
-          <div>📕 Réseaux Sociaux & IA — <strong>2j</strong></div>
-          <div>🎨 Créa Image & Vidéo IA — <strong>1j</strong></div>
+          <div>📕 Réseaux Sociaux &amp; IA — <strong>2j</strong></div>
+          <div>🎨 Créa Image &amp; Vidéo IA — <strong>1j</strong></div>
           <div>🗂️ Notion pour les pros — <strong>2j</strong></div>
         </div>
-        <div style="margin-top:12px; font-size:11px; color:var(--muted);">Cliquez sur une date pour ajouter une session.</div>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted);">Cliquez sur une date pour ajouter une session.</div>
       </div>
     </div>
-
-    <!-- Colonne droite : calendrier + synthèse -->
     <div>
       <div class="period-switcher">
-        <button class="period-btn active" id="btn-mois" onclick="setPeriod('mois')">Vue mensuelle</button>
-        <button class="period-btn" id="btn-trim" onclick="setPeriod('trimestre')">Vue trimestrielle</button>
+        <button class="period-btn active" onclick="setPeriod('mois')">Mensuel</button>
+        <button class="period-btn" onclick="setPeriod('trimestre')">Trimestriel</button>
+        <button class="period-btn" onclick="setPeriod('annuel')">Annuel</button>
       </div>
 
       <div id="view-mois">
-        <div class="card-title" style="margin-bottom:0;"></div>
         <div class="cal-header">
           <div class="cal-nav">
             <button onclick="prevMonth()">&#8249;</button>
@@ -183,7 +166,6 @@
           </div>
         </div>
         <div class="calendar-grid" id="cal-grid"></div>
-
         <div style="margin-top:24px;">
           <div class="card-title">Synthèse du mois</div>
           <div class="synthese-grid">
@@ -191,7 +173,7 @@
             <div class="stat-card charges"><div class="stat-label">Charges HT</div><div class="stat-value" id="m-charges">0 €</div></div>
             <div class="stat-card marge"><div class="stat-label">Marge brute HT</div><div class="stat-value" id="m-marge">0 €</div></div>
           </div>
-          <div class="card" style="padding:0; overflow:hidden;">
+          <div class="card" style="padding:0;overflow:hidden;">
             <div class="card-title" style="padding:16px 16px 0;">Sessions du mois</div>
             <div id="sessions-list" class="sessions-list"></div>
           </div>
@@ -203,51 +185,76 @@
       </div>
 
       <div id="view-trim" style="display:none;">
-        <div class="card-title">Trimestre en cours</div>
-        <div class="trimestre-grid" id="trim-grid"></div>
-        <div class="chart-box">
-          <h3>CA vs Charges par mois (trimestre)</h3>
-          <div class="legend">
-            <div class="legend-item"><div class="legend-dot" style="background:#378ADD"></div>CA HT</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div>Charges HT</div>
+        <div class="cal-header">
+          <div class="cal-nav">
+            <button onclick="prevTrim()">&#8249;</button>
+            <h2 id="trim-title"></h2>
+            <button onclick="nextTrim()">&#8250;</button>
           </div>
+        </div>
+        <div class="trimestre-grid" id="trim-grid"></div>
+        <div id="total-trim-block"></div>
+        <div class="chart-box">
+          <h3>CA vs Charges par mois</h3>
+          <div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#378ADD"></div>CA HT</div><div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div>Charges HT</div></div>
           <div class="chart-wrap"><canvas id="chart-trim"></canvas></div>
+        </div>
+      </div>
+
+      <div id="view-annuel" style="display:none;">
+        <div class="cal-header">
+          <div class="cal-nav">
+            <button onclick="prevYear()">&#8249;</button>
+            <h2 id="year-title"></h2>
+            <button onclick="nextYear()">&#8250;</button>
+          </div>
+        </div>
+        <div class="annual-grid" id="annual-grid"></div>
+        <div id="total-annual-block"></div>
+        <div class="chart-box">
+          <h3>CA vs Charges par mois (année)</h3>
+          <div class="legend"><div class="legend-item"><div class="legend-dot" style="background:#378ADD"></div>CA HT</div><div class="legend-item"><div class="legend-dot" style="background:#E24B4A"></div>Charges HT</div></div>
+          <div class="chart-wrap" style="height:240px;"><canvas id="chart-annual"></canvas></div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Modal ajout session -->
+<!-- Modal session -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
-    <h3 id="modal-title">Ajouter une session</h3>
+    <h3 id="modal-title">Session de formation</h3>
+    <div class="modal-date" id="modal-date-label"></div>
     <div class="modal-field">
       <label>Formation</label>
       <select id="m-formation" onchange="updatePreview()">
-        <option value="n1" data-jours="1">ChatGPT / Claude N1 (1 jour)</option>
-        <option value="n2gpt" data-jours="1">ChatGPT N2 (1 jour)</option>
-        <option value="n2cl" data-jours="1">Claude N2 (1 jour)</option>
-        <option value="rs" data-jours="2">Réseaux Sociaux &amp; IA (2 jours)</option>
-        <option value="crea" data-jours="1">Créa Image &amp; Vidéo IA (1 jour)</option>
-        <option value="notion" data-jours="2">Notion pour les pros (2 jours)</option>
+        <option value="n1">ChatGPT / Claude N1 (1 jour)</option>
+        <option value="n2gpt">ChatGPT N2 (1 jour)</option>
+        <option value="n2cl">Claude N2 (1 jour)</option>
+        <option value="rs">Réseaux Sociaux &amp; IA (2 jours)</option>
+        <option value="crea">Créa Image &amp; Vidéo IA (1 jour)</option>
+        <option value="notion">Notion pour les pros (2 jours)</option>
       </select>
     </div>
     <div class="modal-field">
       <label>Nombre de stagiaires</label>
-      <input type="number" id="m-stag" value="7" min="1" max="20" oninput="updatePreview()">
+      <input type="number" id="m-stag" value="7" min="1" max="30" oninput="updatePreview()">
     </div>
     <div class="modal-preview" id="modal-preview"></div>
     <button class="btn-primary" onclick="saveSession()">Enregistrer la session</button>
+    <button class="btn-secondary" id="btn-move" style="display:none;" onclick="toggleDatePicker()">Déplacer la date</button>
+    <div class="date-picker-row" id="date-picker-row">
+      <label style="font-size:12px;color:var(--muted);font-weight:500;display:block;margin-bottom:6px;">Nouvelle date</label>
+      <input type="date" id="new-date-input" style="width:100%;padding:8px;border:1px solid var(--border);border-radius:6px;font-size:14px;">
+      <button class="btn-secondary" onclick="moveSession()" style="margin-top:8px;">Confirmer le déplacement</button>
+    </div>
     <button class="btn-delete" id="btn-delete" style="display:none;" onclick="deleteSession()">Supprimer cette session</button>
   </div>
 </div>
 
-<footer style="text-align:center; padding:24px; font-size:12px; color:var(--muted); border-top:1px solid var(--border); margin-top:32px;">
-  AIDEO © 2026 — Frédéric Ruault — contact@aideo.fr
-</footer>
-
+<footer style="text-align:center;padding:24px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);margin-top:32px;">AIDEO © 2026 — Frédéric Ruault — contact@aideo.fr</footer>
 <script>
 const FORMATIONS = {
   n1:     { label: 'ChatGPT / Claude N1', jours: 1, color: '#378ADD' },
@@ -257,24 +264,25 @@ const FORMATIONS = {
   crea:   { label: 'Créa Image & Vidéo',  jours: 1, color: '#D85A30' },
   notion: { label: 'Notion pour les pros',jours: 2, color: '#00A99D' },
 };
+const MOIS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 
 let sessions = JSON.parse(localStorage.getItem('aideo_sessions') || '[]');
 let currentDate = new Date();
 let currentMonth = currentDate.getMonth();
 let currentYear = currentDate.getFullYear();
+let currentTrimStart = Math.floor(currentMonth / 3) * 3;
+let currentTrimYear = currentDate.getFullYear();
+let currentAnnualYear = currentDate.getFullYear();
 let period = 'mois';
-let editingKey = null;
 let modalDate = null;
-let chartMois = null, chartTrim = null;
+let chartMois = null, chartTrim = null, chartAnnual = null;
 
 function p(id) { return parseFloat(document.getElementById(id).value) || 0; }
 function eur(n) { return Math.round(n).toLocaleString('fr-FR') + ' €'; }
 
 function calcSession(s) {
-  const prix = p('p_prix'), loyer = p('p_loyer'), repas = p('p_repas'),
-        pub = p('p_pub'), admin = p('p_admin'), qPct = p('p_qualiopi') / 100;
-  const f = FORMATIONS[s.formation];
-  const j = f.jours, n = s.stagiaires;
+  const prix = p('p_prix'), loyer = p('p_loyer'), repas = p('p_repas'), pub = p('p_pub'), admin = p('p_admin'), qPct = p('p_qualiopi') / 100;
+  const f = FORMATIONS[s.formation], j = f.jours, n = s.stagiaires;
   const ca = n * prix * j;
   const charges = (loyer * j) + (repas * j) + pub + (n * admin) + (ca * qPct);
   return { ca, charges, marge: ca - charges };
@@ -282,36 +290,65 @@ function calcSession(s) {
 
 function saveData() { localStorage.setItem('aideo_sessions', JSON.stringify(sessions)); }
 
+function formatDateLabel(str) {
+  const [y, m, d] = str.split('-');
+  return `${parseInt(d)} ${MOIS_FR[parseInt(m)-1]} ${y}`;
+}
+
 function openModal(dateStr) {
   modalDate = dateStr;
-  editingKey = null;
   const existing = sessions.find(s => s.date === dateStr);
+  document.getElementById('modal-date-label').textContent = formatDateLabel(dateStr);
   if (existing) {
-    editingKey = dateStr;
     document.getElementById('m-formation').value = existing.formation;
     document.getElementById('m-stag').value = existing.stagiaires;
     document.getElementById('btn-delete').style.display = 'block';
+    document.getElementById('btn-move').style.display = 'block';
     document.getElementById('modal-title').textContent = 'Modifier la session';
+    document.getElementById('new-date-input').value = dateStr;
   } else {
     document.getElementById('m-formation').value = 'n1';
     document.getElementById('m-stag').value = 7;
     document.getElementById('btn-delete').style.display = 'none';
-    document.getElementById('modal-title').textContent = 'Ajouter une session — ' + formatDateLabel(dateStr);
+    document.getElementById('btn-move').style.display = 'none';
+    document.getElementById('modal-title').textContent = 'Ajouter une session';
+    document.getElementById('date-picker-row').classList.remove('open');
   }
   updatePreview();
   document.getElementById('modal').classList.add('open');
 }
 
-function closeModal() { document.getElementById('modal').classList.remove('open'); }
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('date-picker-row').classList.remove('open');
+}
+
+function toggleDatePicker() {
+  document.getElementById('date-picker-row').classList.toggle('open');
+}
+
+function moveSession() {
+  const newDate = document.getElementById('new-date-input').value;
+  if (!newDate || newDate === modalDate) { closeModal(); return; }
+  const existing = sessions.find(s => s.date === modalDate);
+  if (existing) {
+    sessions = sessions.filter(s => s.date !== modalDate);
+    sessions = sessions.filter(s => s.date !== newDate);
+    sessions.push({ ...existing, date: newDate });
+    saveData();
+  }
+  modalDate = newDate;
+  closeModal();
+  refresh();
+}
 
 function updatePreview() {
   const fKey = document.getElementById('m-formation').value;
   const f = FORMATIONS[fKey];
   const stag = parseInt(document.getElementById('m-stag').value) || 0;
-  const fake = { formation: fKey, stagiaires: stag };
-  const r = calcSession(fake);
+  const r = calcSession({ formation: fKey, stagiaires: stag });
   const j = f.jours;
-  const prix = p('p_prix'), loyer = p('p_loyer'), repas = p('p_repas'), pub = p('p_pub'), admin = p('p_admin'), qPct = p('p_qualiopi') / 100;
+  const loyer = p('p_loyer'), repas = p('p_repas'), pub = p('p_pub'), admin = p('p_admin'), qPct = p('p_qualiopi') / 100;
   const margeColor = r.marge >= 0 ? 'var(--green)' : 'var(--red)';
   document.getElementById('modal-preview').innerHTML = `
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">${f.label} — ${j} jour${j>1?'s':''} — ${stag} stagiaires</div>
@@ -322,8 +359,7 @@ function updatePreview() {
     <div class="preview-row"><span>Admin (${stag} pers)</span><span>${eur(stag*admin)}</span></div>
     <div class="preview-row"><span>Qualiopi (${p('p_qualiopi')}%)</span><span>${eur(r.ca*qPct)}</span></div>
     <div class="preview-row total"><span>Total charges HT</span><span>${eur(r.charges)}</span></div>
-    <div class="preview-row marge"><span>Marge brute HT</span><span style="color:${margeColor}">${eur(r.marge)}</span></div>
-  `;
+    <div class="preview-row marge"><span>Marge brute HT</span><span style="color:${margeColor}">${eur(r.marge)}</span></div>`;
 }
 
 function saveSession() {
@@ -331,168 +367,126 @@ function saveSession() {
   const stag = parseInt(document.getElementById('m-stag').value) || 1;
   sessions = sessions.filter(s => s.date !== modalDate);
   sessions.push({ date: modalDate, formation: fKey, stagiaires: stag });
-  saveData();
-  closeModal();
-  refresh();
+  saveData(); closeModal(); refresh();
 }
 
 function deleteSession() {
   sessions = sessions.filter(s => s.date !== modalDate);
-  saveData();
-  closeModal();
-  refresh();
-}
-
-function formatDateLabel(str) {
-  const [y, m, d] = str.split('-');
-  return `${parseInt(d)} ${['Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'][parseInt(m)-1]} ${y}`;
+  saveData(); closeModal(); refresh();
 }
 
 function setPeriod(p) {
   period = p;
-  document.getElementById('btn-mois').classList.toggle('active', p === 'mois');
-  document.getElementById('btn-trim').classList.toggle('active', p === 'trimestre');
+  document.querySelectorAll('.period-btn').forEach((b, i) => b.classList.toggle('active', ['mois','trimestre','annuel'][i] === p));
   document.getElementById('view-mois').style.display = p === 'mois' ? 'block' : 'none';
   document.getElementById('view-trim').style.display = p === 'trimestre' ? 'block' : 'none';
+  document.getElementById('view-annuel').style.display = p === 'annuel' ? 'block' : 'none';
   refresh();
 }
 
 function prevMonth() { currentMonth--; if (currentMonth < 0) { currentMonth = 11; currentYear--; } refresh(); }
 function nextMonth() { currentMonth++; if (currentMonth > 11) { currentMonth = 0; currentYear++; } refresh(); }
+function prevTrim() { currentTrimStart -= 3; if (currentTrimStart < 0) { currentTrimStart = 9; currentTrimYear--; } refresh(); }
+function nextTrim() { currentTrimStart += 3; if (currentTrimStart > 9) { currentTrimStart = 0; currentTrimYear++; } refresh(); }
+function prevYear() { currentAnnualYear--; refresh(); }
+function nextYear() { currentAnnualYear++; refresh(); }
+
+function getMonthSessions(year, month) {
+  return sessions.filter(s => { const [y, m] = s.date.split('-'); return parseInt(y) === year && parseInt(m) === month + 1; });
+}
 
 function refresh() {
   if (period === 'mois') renderMonth();
-  else renderTrimestre();
+  else if (period === 'trimestre') renderTrimestre();
+  else renderAnnual();
 }
 
 function renderMonth() {
-  const MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-  document.getElementById('cal-title').textContent = `${MOIS[currentMonth]} ${currentYear}`;
+  document.getElementById('cal-title').textContent = `${MOIS_FR[currentMonth]} ${currentYear}`;
   const firstDay = new Date(currentYear, currentMonth, 1).getDay();
   const startOffset = firstDay === 0 ? 6 : firstDay - 1;
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const today = new Date();
-
   let html = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'].map(d => `<div class="cal-day-name">${d}</div>`).join('');
   for (let i = 0; i < startOffset; i++) html += '<div class="cal-day empty"></div>';
-
   for (let d = 1; d <= daysInMonth; d++) {
     const dateStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const sess = sessions.filter(s => s.date === dateStr);
-    const isToday = today.getFullYear() === currentYear && today.getMonth() === currentMonth && today.getDate() === d;
-
-    // Check if this day is a continuation of a 2-day session
     const prevStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d-1).padStart(2,'0')}`;
+    const sess = sessions.find(s => s.date === dateStr);
     const prevSess = sessions.find(s => s.date === prevStr && FORMATIONS[s.formation].jours === 2);
-
-    let badges = '';
-    if (sess.length > 0) {
-      const s = sess[0];
-      const f = FORMATIONS[s.formation];
-      badges = `<div class="session-badge" style="background:${f.color}" onclick="event.stopPropagation();openModal('${dateStr}')">${f.label.substring(0,16)}</div>`;
-    } else if (prevSess) {
-      const f = FORMATIONS[prevSess.formation];
-      badges = `<div class="session-badge day2" style="background:${f.color}">↳ J2</div>`;
-    }
-
-    html += `<div class="cal-day${sess.length>0||prevSess?' has-session':''}${isToday?' today':''}" onclick="openModal('${dateStr}')">
-      <div class="day-num">${d}</div>${badges}</div>`;
+    const isToday = today.getFullYear() === currentYear && today.getMonth() === currentMonth && today.getDate() === d;
+    let badge = '';
+    if (sess) { const f = FORMATIONS[sess.formation]; badge = `<div class="session-badge" style="background:${f.color}" onclick="event.stopPropagation();openModal('${dateStr}')">${f.label.substring(0,14)}</div>`; }
+    else if (prevSess) { const f = FORMATIONS[prevSess.formation]; badge = `<div class="session-badge day2" style="background:${f.color}">↳ J2</div>`; }
+    html += `<div class="cal-day${(sess||prevSess)?' has-session':''}${isToday?' today':''}" onclick="openModal('${dateStr}')"><div class="day-num">${d}</div>${badge}</div>`;
   }
   document.getElementById('cal-grid').innerHTML = html;
-
-  // Synthèse mensuelle
-  const monthSessions = sessions.filter(s => {
-    const [y, m] = s.date.split('-');
-    return parseInt(y) === currentYear && parseInt(m) === currentMonth + 1;
-  });
+  const monthSessions = getMonthSessions(currentYear, currentMonth);
   let totalCA = 0, totalCharges = 0;
   monthSessions.forEach(s => { const r = calcSession(s); totalCA += r.ca; totalCharges += r.charges; });
   const totalMarge = totalCA - totalCharges;
-
   document.getElementById('m-ca').textContent = eur(totalCA);
   document.getElementById('m-charges').textContent = eur(totalCharges);
   document.getElementById('m-marge').textContent = eur(totalMarge);
   document.getElementById('m-marge').style.color = totalMarge >= 0 ? 'var(--green)' : 'var(--red)';
-
-  // Liste sessions
   if (monthSessions.length === 0) {
-    document.getElementById('sessions-list').innerHTML = '<div class="empty-state">Aucune session ce mois — cliquez sur une date pour en ajouter.</div>';
+    document.getElementById('sessions-list').innerHTML = '<div class="empty-state">Aucune session — cliquez sur une date.</div>';
   } else {
     document.getElementById('sessions-list').innerHTML = monthSessions.sort((a,b) => a.date.localeCompare(b.date)).map(s => {
-      const r = calcSession(s);
-      const f = FORMATIONS[s.formation];
-      return `<div class="session-row" onclick="openModal('${s.date}')">
-        <div class="s-date">${formatDateLabel(s.date)}</div>
-        <div class="s-name" style="color:${f.color}">${f.label}</div>
-        <div class="s-stag">${s.stagiaires} pers</div>
-        <div class="s-marge ${r.marge>=0?'pos':'neg'}">${eur(r.marge)}</div>
-      </div>`;
+      const r = calcSession(s); const f = FORMATIONS[s.formation];
+      return `<div class="session-row" onclick="openModal('${s.date}')"><div class="s-date">${formatDateLabel(s.date)}</div><div class="s-name" style="color:${f.color}">${f.label}</div><div class="s-stag">${s.stagiaires} pers</div><div class="s-marge ${r.marge>=0?'pos':'neg'}">${eur(r.marge)}</div></div>`;
     }).join('');
   }
-
-  // Graphique mensuel
   if (chartMois) chartMois.destroy();
   if (monthSessions.length > 0) {
-    const sorted = monthSessions.sort((a,b) => a.date.localeCompare(b.date));
-    chartMois = new Chart(document.getElementById('chart-mois'), {
-      type: 'bar',
-      data: {
-        labels: sorted.map(s => formatDateLabel(s.date).split(' ').slice(0,2).join(' ')),
-        datasets: [{ label: 'Marge', data: sorted.map(s => calcSession(s).marge), backgroundColor: sorted.map(s => calcSession(s).marge >= 0 ? '#1D9E75' : '#D85A30') }]
-      },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-        scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => Math.round(v).toLocaleString('fr-FR') + ' €' } } } }
-    });
+    const sorted = [...monthSessions].sort((a,b) => a.date.localeCompare(b.date));
+    chartMois = new Chart(document.getElementById('chart-mois'), { type: 'bar', data: { labels: sorted.map(s => formatDateLabel(s.date).split(' ').slice(0,2).join(' ')), datasets: [{ data: sorted.map(s => calcSession(s).marge), backgroundColor: sorted.map(s => calcSession(s).marge >= 0 ? '#1D9E75' : '#D85A30') }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => Math.round(v).toLocaleString('fr-FR') + ' €' } } } } });
   }
 }
 
 function renderTrimestre() {
-  const trimStart = Math.floor(currentMonth / 3) * 3;
-  const months = [trimStart, trimStart + 1, trimStart + 2];
-  const MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-
-  let trimHTML = '';
-  const trimCA = [], trimCharges = [], trimMarge = [];
-
+  const months = [currentTrimStart, currentTrimStart+1, currentTrimStart+2];
+  const trimNum = Math.floor(currentTrimStart / 3) + 1;
+  document.getElementById('trim-title').textContent = `T${trimNum} ${currentTrimYear}`;
+  let trimHTML = '', trimCA = 0, trimCharges = 0;
+  const mCA = [], mCharges = [], mLabels = [];
   months.forEach(m => {
-    const monthSessions = sessions.filter(s => {
-      const [y, mo] = s.date.split('-');
-      return parseInt(y) === currentYear && parseInt(mo) === m + 1;
-    });
-    let mCA = 0, mCharges = 0;
-    monthSessions.forEach(s => { const r = calcSession(s); mCA += r.ca; mCharges += r.charges; });
-    const mMarge = mCA - mCharges;
-    trimCA.push(mCA); trimCharges.push(mCharges); trimMarge.push(mMarge);
-
-    trimHTML += `<div class="month-card">
-      <h4>${MOIS[m]} ${currentYear}</h4>
-      <div class="month-stat"><span>Sessions</span><span>${monthSessions.length}</span></div>
-      <div class="month-stat"><span>CA HT</span><span style="color:#185FA5;font-weight:600;">${eur(mCA)}</span></div>
-      <div class="month-stat"><span>Charges</span><span>${eur(mCharges)}</span></div>
-      <div class="month-stat marge-line"><span>Marge</span><span style="color:${mMarge>=0?'var(--green)':'var(--red)'}">${eur(mMarge)}</span></div>
-    </div>`;
+    const ms = getMonthSessions(currentTrimYear, m);
+    let mca = 0, mch = 0;
+    ms.forEach(s => { const r = calcSession(s); mca += r.ca; mch += r.charges; });
+    const mm = mca - mch;
+    trimCA += mca; trimCharges += mch;
+    mCA.push(mca); mCharges.push(mch); mLabels.push(MOIS_FR[m]);
+    trimHTML += `<div class="month-card"><h4>${MOIS_FR[m]}</h4><div class="month-stat"><span>Sessions</span><span>${ms.length}</span></div><div class="month-stat"><span>CA HT</span><span style="color:#185FA5;font-weight:600;">${eur(mca)}</span></div><div class="month-stat"><span>Charges</span><span>${eur(mch)}</span></div><div class="month-stat marge-line"><span>Marge</span><span style="color:${mm>=0?'var(--green)':'var(--red)'}">${eur(mm)}</span></div></div>`;
   });
-
   document.getElementById('trim-grid').innerHTML = trimHTML;
-
+  const trimMarge = trimCA - trimCharges;
+  document.getElementById('total-trim-block').innerHTML = `<div class="total-trim-card"><h4>Total Trimestre ${trimNum} ${currentTrimYear}</h4><div class="total-trim-grid"><div class="total-trim-stat"><div class="ttl">CA HT</div><div class="ttv" style="color:#378ADD;">${eur(trimCA)}</div></div><div class="total-trim-stat"><div class="ttl">Charges HT</div><div class="ttv" style="color:#E24B4A;">${eur(trimCharges)}</div></div><div class="total-trim-stat"><div class="ttl">Marge brute HT</div><div class="ttv" style="color:${trimMarge>=0?'var(--green)':'var(--red)'}">${eur(trimMarge)}</div></div></div></div>`;
   if (chartTrim) chartTrim.destroy();
-  chartTrim = new Chart(document.getElementById('chart-trim'), {
-    type: 'bar',
-    data: {
-      labels: months.map(m => MOIS[m]),
-      datasets: [
-        { label: 'CA HT', data: trimCA, backgroundColor: '#378ADD' },
-        { label: 'Charges HT', data: trimCharges, backgroundColor: '#E24B4A' }
-      ]
-    },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
-      scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => Math.round(v).toLocaleString('fr-FR') + ' €' } } } }
-  });
+  chartTrim = new Chart(document.getElementById('chart-trim'), { type: 'bar', data: { labels: mLabels, datasets: [{ label: 'CA HT', data: mCA, backgroundColor: '#378ADD' }, { label: 'Charges HT', data: mCharges, backgroundColor: '#E24B4A' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => Math.round(v).toLocaleString('fr-FR') + ' €' } } } } });
 }
 
-// Fermer modal au clic extérieur
-document.getElementById('modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+function renderAnnual() {
+  document.getElementById('year-title').textContent = `Année ${currentAnnualYear}`;
+  let annualHTML = '', annualCA = 0, annualCharges = 0, annualSessions = 0;
+  const mCA = [], mCharges = [];
+  for (let m = 0; m < 12; m++) {
+    const ms = getMonthSessions(currentAnnualYear, m);
+    let mca = 0, mch = 0;
+    ms.forEach(s => { const r = calcSession(s); mca += r.ca; mch += r.charges; });
+    const mm = mca - mch;
+    annualCA += mca; annualCharges += mch; annualSessions += ms.length;
+    mCA.push(mca); mCharges.push(mch);
+    annualHTML += `<div class="annual-card${ms.length>0?' has-data':''}"><h4>${MOIS_FR[m]}</h4><div class="annual-stat"><span>Sessions</span><span>${ms.length}</span></div><div class="annual-stat"><span>CA HT</span><span style="${mca>0?'color:#185FA5;font-weight:600;':''}">${eur(mca)}</span></div><div class="annual-stat marge-line"><span>Marge</span><span style="color:${mm>=0?'var(--green)':'var(--red)'}">${eur(mm)}</span></div></div>`;
+  }
+  document.getElementById('annual-grid').innerHTML = annualHTML;
+  const annualMarge = annualCA - annualCharges;
+  document.getElementById('total-annual-block').innerHTML = `<div class="total-annual-card"><h4>Bilan Annuel ${currentAnnualYear}</h4><div class="total-annual-grid"><div class="total-annual-stat"><div class="ttl">Sessions</div><div class="ttv">${annualSessions}</div></div><div class="total-annual-stat"><div class="ttl">CA HT</div><div class="ttv">${eur(annualCA)}</div></div><div class="total-annual-stat"><div class="ttl">Charges HT</div><div class="ttv">${eur(annualCharges)}</div></div><div class="total-annual-stat"><div class="ttl">Marge brute HT</div><div class="ttv">${eur(annualMarge)}</div></div></div></div>`;
+  if (chartAnnual) chartAnnual.destroy();
+  chartAnnual = new Chart(document.getElementById('chart-annual'), { type: 'bar', data: { labels: MOIS_FR.map(m => m.substring(0,3)), datasets: [{ label: 'CA HT', data: mCA, backgroundColor: '#378ADD' }, { label: 'Charges HT', data: mCharges, backgroundColor: '#E24B4A' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { autoSkip: false } }, y: { ticks: { callback: v => Math.round(v).toLocaleString('fr-FR') + ' €' } } } } });
+}
 
+document.getElementById('modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
 refresh();
 </script>
 </body>
