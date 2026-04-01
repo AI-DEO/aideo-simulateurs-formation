@@ -114,7 +114,7 @@ footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted)
 <body>
 <header>
   <h1>AIDEO — Simulateurs Rentabilité</h1>
-  <span>Formations IA</span>
+  <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:13px;color:var(--muted);">Sessions chargées depuis Notion</span><button id="btn-refresh" onclick="loadSessionsFromNotion()" style="padding:6px 14px;background:var(--orange);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;">↻ Actualiser</button></div>
 </header>
 <nav>
   <a href="simulateur-1j.html">1 Journée</a>
@@ -247,6 +247,40 @@ footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted)
 <footer>AIDEO © 2026 — Frédéric Ruault — contact@aideo.fr</footer>
 
 <script>
+const WEBHOOK_URL = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-sessions';
+
+async function loadSessionsFromNotion() {
+  const btn = document.getElementById('btn-refresh');
+  if (btn) { btn.textContent = '↻ Chargement...'; btn.disabled = true; }
+  try {
+    const res = await fetch(WEBHOOK_URL, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const data = await res.json();
+    const raw = data.sessions || data;
+    allSessions = raw.map(s => ({
+      date: s.date,
+      formation: Object.keys(FORMATIONS).find(k => FORMATIONS[k].label === s.formation) || 'n1',
+      stagiaires: s.nb_inscrits || 0,
+      places_max: s.places_max || 10,
+      statut: s.statut || '🟡 Planifiée',
+      notion_id: s.id
+    })).filter(s => s.date);
+    if (btn) { btn.textContent = '↻ Actualiser'; btn.disabled = false; }
+    filterSessions();
+    buildSessionsTable();
+    renderResults();
+  } catch(e) {
+    console.error('Erreur chargement Notion:', e);
+    if (btn) { btn.textContent = '↻ Actualiser'; btn.disabled = false; }
+    allSessions = [];
+    filterSessions();
+    buildSessionsTable();
+    renderResults();
+  }
+}
+
 const FORMATIONS = {
   n1:     { label: 'ChatGPT / Claude N1', jours: 1, color: '#378ADD' },
   n2gpt:  { label: 'ChatGPT N2',          jours: 1, color: '#5B4DB5' },

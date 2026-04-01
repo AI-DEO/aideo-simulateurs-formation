@@ -117,7 +117,7 @@
 </style>
 </head>
 <body>
-<header><h1>AIDEO — Simulateurs Rentabilité</h1><span>Formations IA</span></header>
+<header><h1>AIDEO — Simulateurs Rentabilité</h1><div style="display:flex;align-items:center;gap:12px;"><span style="font-size:13px;color:var(--muted);">Sessions chargées depuis Notion</span><button onclick="loadSessionsFromNotion()" style="padding:6px 14px;background:var(--orange);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;">↻ Actualiser</button></div></header>
 <nav>
   <a href="simulateur-1j.html">1 Journée</a>
   <a href="simulateur-mj.html">Multi-jours</a>
@@ -148,7 +148,7 @@
           <div>🎨 Créa Image &amp; Vidéo IA — <strong>1j</strong></div>
           <div>🗂️ Notion pour les pros — <strong>2j</strong></div>
         </div>
-        <div style="margin-top:10px;font-size:11px;color:var(--muted);">Cliquez sur une date pour ajouter une session.</div>
+        <div style="margin-top:10px;font-size:11px;color:var(--turquoise);">✓ Sessions gérées dans Notion — cliquez sur Actualiser pour mettre à jour.</div>
       </div>
     </div>
     <div>
@@ -257,6 +257,34 @@
 
 <footer style="text-align:center;padding:24px;font-size:12px;color:var(--muted);border-top:1px solid var(--border);margin-top:32px;">AIDEO © 2026 — Frédéric Ruault — contact@aideo.fr</footer>
 <script>
+const WEBHOOK_URL = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-sessions';
+
+async function loadSessionsFromNotion() {
+  try {
+    const res = await fetch(WEBHOOK_URL, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const data = await res.json();
+    const raw = data.sessions || data;
+    // Convertir format Notion vers format interne
+    sessions = raw.map(s => ({
+      date: s.date,
+      formation: Object.keys(FORMATIONS).find(k => FORMATIONS[k].label === s.formation) || 'n1',
+      stagiaires: s.nb_inscrits || 0,
+      places_max: s.places_max || 10,
+      statut: s.statut || '🟡 Planifiée',
+      notion_id: s.id
+    })).filter(s => s.date);
+    saveData();
+    refresh();
+  } catch(e) {
+    console.error('Erreur chargement Notion:', e);
+    // Fallback localStorage
+    refresh();
+  }
+}
+
 const FORMATIONS = {
   n1:     { label: 'ChatGPT / Claude N1', jours: 1, color: '#378ADD' },
   n2gpt:  { label: 'ChatGPT N2',          jours: 1, color: '#5B4DB5' },
@@ -417,9 +445,9 @@ function renderMonth() {
     const prevSess = sessions.find(s => s.date === prevStr && FORMATIONS[s.formation].jours === 2);
     const isToday = today.getFullYear() === currentYear && today.getMonth() === currentMonth && today.getDate() === d;
     let badge = '';
-    if (sess) { const f = FORMATIONS[sess.formation]; badge = `<div class="session-badge" style="background:${f.color}" onclick="event.stopPropagation();openModal('${dateStr}')">${f.label.substring(0,14)}</div>`; }
+    if (sess) { const f = FORMATIONS[sess.formation]; badge = `<div class="session-badge" style="background:${f.color}" >${f.label.substring(0,14)}</div>`; }
     else if (prevSess) { const f = FORMATIONS[prevSess.formation]; badge = `<div class="session-badge day2" style="background:${f.color}">↳ J2</div>`; }
-    html += `<div class="cal-day${(sess||prevSess)?' has-session':''}${isToday?' today':''}" onclick="openModal('${dateStr}')"><div class="day-num">${d}</div>${badge}</div>`;
+    html += `<div class="cal-day${(sess||prevSess)?' has-session':''}${isToday?' today':''}" style="cursor:default;"><div class="day-num">${d}</div>${badge}</div>`;
   }
   document.getElementById('cal-grid').innerHTML = html;
   const monthSessions = getMonthSessions(currentYear, currentMonth);
