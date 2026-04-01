@@ -739,8 +739,9 @@ async function loadParams() {
 // Init
 async function init() {
   initSelectors();
-  await loadParams();
   await loadSessionsFromNotion();
+  await loadParams();
+  renderResults();
 }
 
 init();
