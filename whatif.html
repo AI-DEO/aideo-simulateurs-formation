@@ -114,7 +114,8 @@ footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted)
 <body>
 <header>
   <h1>AIDEO — Simulateurs Rentabilité</h1>
-  <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:13px;color:var(--muted);">Sessions chargées depuis Notion</span><button id="btn-refresh" onclick="loadSessionsFromNotion()" style="padding:6px 14px;background:var(--orange);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;">↻ Actualiser</button></div>
+  <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:13px;color:var(--muted);">Sessions chargées depuis Notion</span><button id="btn-refresh" onclick="loadSessionsFromNotion()" style="padding:6px 14px;background:var(--orange);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;">↻ Actualiser</button>
+<button id="btn-save" onclick="saveParams()" style="padding:6px 14px;background:var(--turquoise);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;">💾 Sauvegarder</button></div>
 </header>
 <nav>
   <a href="simulateur-1j.html">1 Journée</a>
@@ -248,6 +249,8 @@ footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted)
 
 <script>
 const WEBHOOK_URL = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-sessions';
+const WEBHOOK_GET_PARAMS = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-whatif-params';
+const WEBHOOK_SAVE_PARAMS = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-whatif-save';
 
 async function loadSessionsFromNotion() {
   const btn = document.getElementById('btn-refresh');
@@ -648,6 +651,88 @@ function drawCharts(sessions, totals) {
       scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => Math.round(v).toLocaleString('fr-FR') + ' €' } } }
     }
   });
+}
+
+// Sauvegarde des paramètres dans Notion
+async function saveParams() {
+  const btn = document.getElementById('btn-save');
+  btn.textContent = '💾 Sauvegarde...';
+  btn.disabled = true;
+
+  const params = {
+    charges: {
+      prix_p: v('c_prix_p'), prix_m: v('c_prix_m'), prix_o: v('c_prix_o'),
+      loyer_p: v('c_loyer_p'), loyer_m: v('c_loyer_m'), loyer_o: v('c_loyer_o'),
+      repas_p: v('c_repas_p'), repas_m: v('c_repas_m'), repas_o: v('c_repas_o'),
+      pub_p: v('c_pub_p'), pub_m: v('c_pub_m'), pub_o: v('c_pub_o'),
+      admin_p: v('c_admin_p'), admin_m: v('c_admin_m'), admin_o: v('c_admin_o'),
+      qual_p: v('c_qual_p'), qual_m: v('c_qual_m'), qual_o: v('c_qual_o'),
+    },
+    objectif: v('obj_marge'),
+    participants: {}
+  };
+
+  // Sauvegarder les participants
+  Object.keys(FORMATIONS).forEach(key => {
+    params.participants[key] = {
+      p: v('n_' + key + '_pess') || F_DEFAULTS[key][0],
+      m: v('n_' + key + '_moy') || F_DEFAULTS[key][1],
+      o: v('n_' + key + '_opti') || F_DEFAULTS[key][2],
+    };
+  });
+
+  try {
+    const res = await fetch(WEBHOOK_SAVE_PARAMS, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ params: JSON.stringify(params) })
+    });
+    btn.textContent = '✅ Sauvegardé !';
+    setTimeout(() => { btn.textContent = '💾 Sauvegarder'; btn.disabled = false; }, 2000);
+  } catch(e) {
+    console.error('Erreur sauvegarde:', e);
+    btn.textContent = '❌ Erreur';
+    setTimeout(() => { btn.textContent = '💾 Sauvegarder'; btn.disabled = false; }, 2000);
+  }
+}
+
+// Chargement des paramètres depuis Notion
+async function loadParams() {
+  try {
+    const res = await fetch(WEBHOOK_GET_PARAMS, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const data = await res.json();
+    const raw = data.params;
+    if (!raw || raw === '{}') return;
+    const params = typeof raw === 'string' ? JSON.parse(raw) : raw;
+
+    // Restaurer les charges
+    if (params.charges) {
+      Object.entries(params.charges).forEach(([key, val]) => {
+        const el = document.getElementById('c_' + key);
+        if (el) el.value = val;
+      });
+    }
+
+    // Restaurer l'objectif
+    if (params.objectif) document.getElementById('obj_marge').value = params.objectif;
+
+    // Restaurer les participants
+    if (params.participants) {
+      Object.entries(params.participants).forEach(([fKey, vals]) => {
+        ['pess','moy','opti'].forEach((sc, si) => {
+          const el = document.getElementById('n_' + fKey + '_' + sc);
+          if (el) el.value = vals[['p','m','o'][si]] || el.value;
+        });
+      });
+    }
+
+    renderResults();
+  } catch(e) {
+    console.error('Erreur chargement params:', e);
+  }
 }
 
 // Init
