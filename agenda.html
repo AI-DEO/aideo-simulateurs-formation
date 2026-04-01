@@ -267,17 +267,8 @@ async function loadSessionsFromNotion() {
     });
     const data = await res.json();
     // Le webhook retourne { sessions: [...] } ou directement [...]
-    // Le webhook peut retourner un objet unique, un tableau, ou {sessions:[...]}
-    let raw = [];
-    if (Array.isArray(data)) {
-      raw = data;
-    } else if (data.sessions && Array.isArray(data.sessions)) {
-      raw = data.sessions;
-    } else if (data.id) {
-      raw = [data]; // un seul objet
-    } else {
-      raw = Object.values(data).filter(v => v && v.id) || [];
-    }
+    // Le webhook retourne { sessions: [...] }
+    const raw = data.sessions || [];
     // Convertir format Notion vers format interne
     sessions = raw.map(s => ({
       date: s.date,
