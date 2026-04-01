@@ -259,15 +259,7 @@ async function loadSessionsFromNotion() {
     });
     const data = await res.json();
     // n8n retourne { result: "[...]" } où result est une chaîne JSON
-    let raw = [];
-    if (Array.isArray(data)) {
-      raw = data;
-    } else if (data.sessions && Array.isArray(data.sessions)) {
-      raw = data.sessions;
-    } else if (data.result) {
-      const parsed = typeof data.result === 'string' ? JSON.parse(data.result) : data.result;
-      raw = parsed.sessions || (Array.isArray(parsed) ? parsed : [parsed]);
-    }
+    const raw = Array.isArray(data) ? data : (data.sessions || []);
     allSessions = raw.map(s => ({
       date: s.date,
       formation: Object.keys(FORMATIONS).find(k => FORMATIONS[k].label === s.formation) || 'n1',
