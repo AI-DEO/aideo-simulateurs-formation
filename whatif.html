@@ -737,18 +737,10 @@ async function loadParams() {
 }
 
 // Init
-function init() {
+async function init() {
   initSelectors();
-  filterSessions();
-  if (filteredSessions.length === 0 && allSessions.length === 0) {
-    document.getElementById('no-data').style.display = 'block';
-    document.getElementById('content').style.display = 'none';
-  } else {
-    document.getElementById('no-data').style.display = 'none';
-    document.getElementById('content').style.display = 'block';
-    buildSessionsTable();
-    renderResults();
-  }
+  await loadParams();
+  await loadSessionsFromNotion();
 }
 
 init();
