@@ -26,8 +26,6 @@ nav a.active { color: var(--orange); border-bottom-color: var(--orange); font-we
 .page-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
 .card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
 .card-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 14px; }
-
-/* Barre de contrôles */
 .controls-bar { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 20px; }
 .ctrl-group { display: flex; flex-direction: column; gap: 4px; }
 .ctrl-group label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
@@ -36,8 +34,6 @@ nav a.active { color: var(--orange); border-bottom-color: var(--orange); font-we
 .period-switcher { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
 .period-btn { padding: 8px 16px; font-size: 13px; font-weight: 500; cursor: pointer; background: var(--white); border: none; color: var(--muted); transition: all .2s; }
 .period-btn.active { background: var(--orange); color: #fff; }
-
-/* Tableau sessions */
 .sessions-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .sessions-table th { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); padding: 8px 12px; border-bottom: 2px solid var(--border); text-align: left; white-space: nowrap; }
 .sessions-table th.sc { text-align: center; }
@@ -54,8 +50,6 @@ nav a.active { color: var(--orange); border-bottom-color: var(--orange); font-we
 .f-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
 .date-cell { font-size: 12px; color: var(--muted); white-space: nowrap; }
 .subtotal-row td { background: #FAFAF8; font-weight: 700; font-size: 13px; }
-
-/* Tableau charges */
 .charges-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .charges-table th { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); padding: 8px 12px; border-bottom: 2px solid var(--border); text-align: right; }
 .charges-table th:first-child { text-align: left; }
@@ -65,8 +59,6 @@ nav a.active { color: var(--orange); border-bottom-color: var(--orange); font-we
 .charges-table input.pess-in { border-color: rgba(226,75,74,.3); background: var(--pess-bg); }
 .charges-table input.moy-in { border-color: rgba(232,119,34,.3); background: var(--moy-bg); }
 .charges-table input.opti-in { border-color: rgba(29,158,117,.3); background: var(--opti-bg); }
-
-/* Résultats */
 .pos { color: var(--green); }
 .neg { color: var(--red); }
 .result-val { font-weight: 700; font-size: 14px; }
@@ -74,8 +66,6 @@ nav a.active { color: var(--orange); border-bottom-color: var(--orange); font-we
 .delta-badge { font-size: 10px; padding: 1px 5px; border-radius: 4px; display: inline-block; }
 .delta-pos { background: var(--opti-bg); color: var(--opti); }
 .delta-neg { background: var(--pess-bg); color: var(--pess); }
-
-/* Matrice */
 .matrix-wrap { overflow-x: auto; }
 .matrix-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 600px; }
 .matrix-table th { padding: 10px 14px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; border-bottom: 2px solid var(--border); text-align: center; }
@@ -87,16 +77,12 @@ nav a.active { color: var(--orange); border-bottom-color: var(--orange); font-we
 .obj-ok { background: var(--opti-bg); color: var(--opti); }
 .obj-ko { background: var(--pess-bg); color: var(--pess); }
 .highlight-cell { background: #FFFBF4; }
-
-/* Synthèse KPI */
 .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
 .kpi-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
 .kpi-label { font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 10px; }
 .kpi-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; font-size: 13px; }
 .kpi-row .kpi-name { color: var(--muted); font-size: 12px; }
 .kpi-row .kpi-val { font-weight: 700; }
-
-/* Graphiques */
 .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
 .chart-box { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
 .chart-box h3 { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 12px; }
@@ -104,7 +90,6 @@ nav a.active { color: var(--orange); border-bottom-color: var(--orange); font-we
 .legend { display: flex; gap: 16px; margin-bottom: 10px; flex-wrap: wrap; }
 .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
 .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
-
 .no-data { text-align: center; padding: 60px 20px; color: var(--muted); font-size: 14px; }
 .no-data strong { display: block; font-size: 18px; margin-bottom: 8px; color: var(--text); }
 footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); margin-top: 32px; }
@@ -113,36 +98,30 @@ footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted)
 </head>
 <body>
 <header>
-  <h1>AIDEO — Simulateurs Rentabilité</h1>
+  <h1>AIDEO - Simulateurs Rentabilite</h1>
   <div style="display:flex;align-items:center;gap:12px;">
-    <span style="font-size:13px;color:var(--muted);">Sessions chargées depuis Notion</span>
-    <button id="btn-refresh" onclick="loadSessionsFromNotion()" style="padding:6px 14px;background:var(--orange);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;">↻ Actualiser</button>
-    <button id="btn-save" onclick="saveParams()" style="padding:6px 14px;background:var(--turquoise);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;">💾 Sauvegarder</button>
+    <span style="font-size:13px;color:var(--muted);">Sessions chargees depuis Notion</span>
+    <button id="btn-refresh" onclick="loadSessionsFromNotion()" style="padding:6px 14px;background:var(--orange);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;">Actualiser</button>
+    <button id="btn-save" onclick="saveParams()" style="padding:6px 14px;background:var(--turquoise);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;">Sauvegarder</button>
   </div>
 </header>
 <nav>
-  <a href="simulateur-1j.html">1 Journée</a>
+  <a href="simulateur-1j.html">1 Journee</a>
   <a href="simulateur-mj.html">Multi-jours</a>
-  <a href="agenda.html">Agenda prévisionnel</a>
+  <a href="agenda.html">Agenda previsionnel</a>
   <a href="whatif.html" class="active">Tableau What If</a>
 </nav>
 
 <div class="main">
-  <div class="page-title">Tableau What If — Comparatif prévisionnel</div>
-  <div class="page-sub">Chaque session de votre agenda dispose de ses propres hypothèses de remplissage. Les charges varient selon 3 scénarios globaux.</div>
-
-  <div id="no-data" class="no-data" style="display:none;">
-    <strong>Aucune session planifiée</strong>
-    Commencez par ajouter des formations dans l'<a href="agenda.html" style="color:var(--orange);">Agenda prévisionnel</a>, puis revenez ici.
-  </div>
+  <div class="page-title">Tableau What If - Comparatif previsionnel</div>
+  <div class="page-sub">Chaque session dispose de ses propres hypotheses de remplissage. Les charges varient selon 3 scenarios globaux.</div>
 
   <div id="content">
-    <!-- Barre de contrôles -->
     <div class="card">
       <div class="controls-bar">
         <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;">
           <div class="ctrl-group">
-            <label>Période</label>
+            <label>Periode</label>
             <div class="period-switcher">
               <button class="period-btn active" onclick="setPeriod('mois')">Mensuel</button>
               <button class="period-btn" onclick="setPeriod('trimestre')">Trimestriel</button>
@@ -150,7 +129,7 @@ footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted)
             </div>
           </div>
           <div class="ctrl-group" id="year-ctrl">
-            <label>Année</label>
+            <label>Annee</label>
             <select id="sel-year" onchange="onPeriodChange()" style="padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;"></select>
           </div>
           <div class="ctrl-group" id="month-ctrl">
@@ -159,29 +138,28 @@ footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted)
           </div>
         </div>
         <div class="ctrl-group">
-          <label>Objectif de marge HT (€)</label>
+          <label>Objectif de marge HT (euros)</label>
           <input type="number" id="obj_marge" value="10000" oninput="renderResults()">
         </div>
       </div>
     </div>
 
-    <!-- Sessions + hypothèses participants -->
     <div class="card">
-      <div class="card-title">Sessions planifiées — Hypothèses de participants</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Saisissez le nombre de participants pour chaque scénario et chaque session.</div>
+      <div class="card-title">Sessions planifiees - Hypotheses de participants</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Saisissez le nombre de participants pour chaque scenario et chaque session.</div>
       <div style="overflow-x:auto;">
         <table class="sessions-table" id="sessions-table">
           <thead>
             <tr>
               <th>Date</th>
               <th>Formation</th>
-              <th>Durée</th>
-              <th class="sc pess-h">▼ Pessimiste</th>
-              <th class="sc" style="color:#aaa;font-size:10px;">Annulée</th>
-              <th class="sc moy-h">◆ Moyen</th>
-              <th class="sc" style="color:#aaa;font-size:10px;">Annulée</th>
-              <th class="sc opti-h">▲ Optimiste</th>
-              <th class="sc" style="color:#aaa;font-size:10px;">Annulée</th>
+              <th>Duree</th>
+              <th class="sc pess-h">Pessimiste</th>
+              <th class="sc" style="color:#aaa;font-size:10px;">Annulee</th>
+              <th class="sc moy-h">Moyen</th>
+              <th class="sc" style="color:#aaa;font-size:10px;">Annulee</th>
+              <th class="sc opti-h">Optimiste</th>
+              <th class="sc" style="color:#aaa;font-size:10px;">Annulee</th>
             </tr>
           </thead>
           <tbody id="sessions-tbody"></tbody>
@@ -189,46 +167,45 @@ footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted)
       </div>
     </div>
 
-    <!-- Charges par scénario -->
     <div class="card">
-      <div class="card-title">Charges globales par scénario</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Ces charges s'appliquent à toutes les sessions selon le scénario sélectionné.</div>
+      <div class="card-title">Charges globales par scenario</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Ces charges s'appliquent a toutes les sessions selon le scenario selectionne.</div>
       <table class="charges-table">
         <thead>
           <tr>
             <th>Charge</th>
-            <th style="color:var(--pess);">▼ Pessimiste</th>
-            <th style="color:var(--moy);">◆ Moyen</th>
-            <th style="color:var(--opti);">▲ Optimiste</th>
+            <th style="color:var(--pess);">Pessimiste</th>
+            <th style="color:var(--moy);">Moyen</th>
+            <th style="color:var(--opti);">Optimiste</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Prix vente HT / pers / jour (€)</td>
+            <td>Prix vente HT / pers / jour (euros)</td>
             <td><input type="number" id="c_prix_p" value="350" class="pess-in" oninput="renderResults()"></td>
             <td><input type="number" id="c_prix_m" value="350" class="moy-in" oninput="renderResults()"></td>
             <td><input type="number" id="c_prix_o" value="350" class="opti-in" oninput="renderResults()"></td>
           </tr>
           <tr>
-            <td>Loyer HT / jour (€) <span style="font-size:10px;background:#FFF3E8;color:var(--orange);padding:1px 5px;border-radius:3px;">× jours</span></td>
+            <td>Loyer HT / jour (euros)</td>
             <td><input type="number" id="c_loyer_p" value="280" class="pess-in" oninput="renderResults()"></td>
             <td><input type="number" id="c_loyer_m" value="250" class="moy-in" oninput="renderResults()"></td>
             <td><input type="number" id="c_loyer_o" value="200" class="opti-in" oninput="renderResults()"></td>
           </tr>
           <tr>
-            <td>Repas perso / jour (€) <span style="font-size:10px;background:#FFF3E8;color:var(--orange);padding:1px 5px;border-radius:3px;">× jours</span></td>
+            <td>Repas perso / jour (euros)</td>
             <td><input type="number" id="c_repas_p" value="25" class="pess-in" oninput="renderResults()"></td>
             <td><input type="number" id="c_repas_m" value="25" class="moy-in" oninput="renderResults()"></td>
             <td><input type="number" id="c_repas_o" value="25" class="opti-in" oninput="renderResults()"></td>
           </tr>
           <tr>
-            <td>Pub HT / session (€) <span style="font-size:10px;background:#F0F0EE;color:var(--muted);padding:1px 5px;border-radius:3px;">fixe</span></td>
+            <td>Pub HT / session (euros)</td>
             <td><input type="number" id="c_pub_p" value="150" class="pess-in" oninput="renderResults()"></td>
             <td><input type="number" id="c_pub_m" value="100" class="moy-in" oninput="renderResults()"></td>
             <td><input type="number" id="c_pub_o" value="70" class="opti-in" oninput="renderResults()"></td>
           </tr>
           <tr>
-            <td>Admin / stagiaire (€) <span style="font-size:10px;background:#F0F0EE;color:var(--muted);padding:1px 5px;border-radius:3px;">× pers</span></td>
+            <td>Admin / stagiaire (euros)</td>
             <td><input type="number" id="c_admin_p" value="5" class="pess-in" oninput="renderResults()"></td>
             <td><input type="number" id="c_admin_m" value="0" class="moy-in" oninput="renderResults()"></td>
             <td><input type="number" id="c_admin_o" value="0" class="opti-in" oninput="renderResults()"></td>
@@ -243,108 +220,84 @@ footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted)
       </table>
     </div>
 
-    <!-- Résultats -->
     <div id="results-section"></div>
   </div>
 </div>
 
-<footer>AIDEO © 2026 — Frédéric Ruault — <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="791a16170d181a0d3918101d1c16571f0b">[email&#160;protected]</a></footer>
+<footer>AIDEO 2026 - Frederic Ruault - contact@aideo.fr</footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-const WEBHOOK_URL = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-sessions';
-const WEBHOOK_GET_PARAMS = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-whatif-params';
-const WEBHOOK_SAVE_PARAMS = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-whatif-save';
+<script>
+var WEBHOOK_URL = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-sessions';
+var WEBHOOK_GET_PARAMS = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-whatif-params';
+var WEBHOOK_SAVE_PARAMS = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-whatif-save';
 
-async function loadSessionsFromNotion() {
-  const btn = document.getElementById('btn-refresh');
-  if (btn) { btn.textContent = '↻ Chargement...'; btn.disabled = true; }
-  try {
-    const res = await fetch(WEBHOOK_URL, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    });
-    const data = await res.json();
-    const raw = Array.isArray(data) ? data : (data.sessions || []);
-    allSessions = raw.map(s => ({
-      date: s.date,
-      formation: Object.keys(FORMATIONS).find(k => FORMATIONS[k].label === s.formation) || 'n1',
-      stagiaires: s.nb_inscrits || 0,
-      places_max: s.places_max || 10,
-      statut: s.statut || '🟡 Planifiée',
-      notion_id: s.id
-    })).filter(s => s.date);
-    if (btn) { btn.textContent = '↻ Actualiser'; btn.disabled = false; }
-    filterSessions();
-    buildSessionsTable();
-    renderResults();
-  } catch(e) {
-    console.error('Erreur chargement Notion:', e);
-    if (btn) { btn.textContent = '↻ Actualiser'; btn.disabled = false; }
-    allSessions = [];
-    filterSessions();
-    buildSessionsTable();
-    renderResults();
-  }
-}
-
-const FORMATIONS = {
+var FORMATIONS = {
   n1:     { label: 'ChatGPT / Claude N1', jours: 1, color: '#378ADD' },
   n2gpt:  { label: 'ChatGPT N2',          jours: 1, color: '#5B4DB5' },
   n2cl:   { label: 'Claude N2',           jours: 1, color: '#9B3DA5' },
-  rs:     { label: 'Réseaux Sociaux & IA',jours: 2, color: '#E87722' },
-  crea:   { label: 'Créa Image & Vidéo',  jours: 1, color: '#D85A30' },
-  notion: { label: 'Notion pour les pros',jours: 2, color: '#00A99D' },
+  rs:     { label: 'Reseaux Sociaux & IA',jours: 2, color: '#E87722' },
+  crea:   { label: 'Crea Image & Video',  jours: 1, color: '#D85A30' },
+  notion: { label: 'Notion pour les pros',jours: 2, color: '#00A99D' }
 };
-const MOIS_FR = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-const SC = ['p','m','o'];
-const F_DEFAULTS = { n1:[5,7,10], n2gpt:[4,6,8], n2cl:[4,6,8], rs:[5,7,9], crea:[3,5,7], notion:[4,6,8] };
-const SC_LABELS = ['Pessimiste','Moyen','Optimiste'];
-const SC_COLORS = ['#E24B4A','#E87722','#1D9E75'];
-const SC_BG = ['#FEF2F2','#FFF8F4','#F0FAF8'];
+var MOIS_FR = ['Janvier','Fevrier','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre'];
+var SC = ['p','m','o'];
+var F_DEFAULTS = { n1:[5,7,10], n2gpt:[4,6,8], n2cl:[4,6,8], rs:[5,7,9], crea:[3,5,7], notion:[4,6,8] };
+var SC_LABELS = ['Pessimiste','Moyen','Optimiste'];
+var SC_COLORS = ['#E24B4A','#E87722','#1D9E75'];
 
-let period = 'mois';
-let allSessions = [];
-let filteredSessions = [];
-let participants = {};
-let chartMarge = null, chartDiag = null;
+var period = 'mois';
+var allSessions = [];
+var filteredSessions = [];
+var participants = {};
+var chartMarge = null;
+var chartDiag = null;
 
-function v(id) { return parseFloat(document.getElementById(id)?.value) || 0; }
-function eur(n) { return Math.round(n).toLocaleString('fr-FR') + ' €'; }
-function fmtDate(str) { const [y,m,d] = str.split('-'); return `${parseInt(d)} ${MOIS_FR[parseInt(m)-1]}`; }
+function v(id) {
+  var el = document.getElementById(id);
+  return el ? (parseFloat(el.value) || 0) : 0;
+}
+function eur(n) { return Math.round(n).toLocaleString('fr-FR') + ' euros'; }
+function fmtDate(str) {
+  var parts = str.split('-');
+  return parseInt(parts[2]) + ' ' + MOIS_FR[parseInt(parts[1])-1];
+}
 
 function getCharge(sc) {
   return {
-    prix:  v(`c_prix_${sc}`),
-    loyer: v(`c_loyer_${sc}`),
-    repas: v(`c_repas_${sc}`),
-    pub:   v(`c_pub_${sc}`),
-    admin: v(`c_admin_${sc}`),
-    qual:  v(`c_qual_${sc}`) / 100,
+    prix:  v('c_prix_'  + sc),
+    loyer: v('c_loyer_' + sc),
+    repas: v('c_repas_' + sc),
+    pub:   v('c_pub_'   + sc),
+    admin: v('c_admin_' + sc),
+    qual:  v('c_qual_'  + sc) / 100
   };
 }
 
 function calcSession(s, n, sc, cancelled) {
-  if (cancelled) return { ca: 0, charges: 0, marge: 0, cancelled: true };
-  const f = FORMATIONS[s.formation];
-  const c = getCharge(sc);
-  const j = f.jours;
-  const ca = n * c.prix * j;
-  const charges = (c.loyer * j) + (c.repas * j) + c.pub + (n * c.admin) + (ca * c.qual);
-  return { ca, charges, marge: ca - charges, cancelled: false };
+  if (cancelled) return { ca: 0, charges: 0, marge: 0 };
+  var f = FORMATIONS[s.formation];
+  var c = getCharge(sc);
+  var j = f.jours;
+  var ca = n * c.prix * j;
+  var charges = (c.loyer * j) + (c.repas * j) + c.pub + (n * c.admin) + (ca * c.qual);
+  return { ca: ca, charges: charges, marge: ca - charges };
 }
 
 function initSelectors() {
-  allSessions = [];
-  const years = [...new Set(allSessions.map(s => parseInt(s.date.split('-')[0])))].sort();
-  if (!years.length) years.push(new Date().getFullYear());
+  var years = [];
+  var curYear = new Date().getFullYear();
+  years.push(curYear);
 
-  const selYear = document.getElementById('sel-year');
-  const curYear = new Date().getFullYear();
-  selYear.innerHTML = years.map(y => `<option value="${y}"${y===curYear?' selected':''}>${y}</option>`).join('');
+  var selYear = document.getElementById('sel-year');
+  selYear.innerHTML = years.map(function(y) {
+    return '<option value="' + y + '"' + (y === curYear ? ' selected' : '') + '>' + y + '</option>';
+  }).join('');
 
-  const selMonth = document.getElementById('sel-month');
-  const curMonth = new Date().getMonth();
-  selMonth.innerHTML = MOIS_FR.map((m,i) => `<option value="${i}"${i===curMonth?' selected':''}>${m}</option>`).join('');
+  var selMonth = document.getElementById('sel-month');
+  var curMonth = new Date().getMonth();
+  selMonth.innerHTML = MOIS_FR.map(function(m, i) {
+    return '<option value="' + i + '"' + (i === curMonth ? ' selected' : '') + '>' + m + '</option>';
+  }).join('');
 
   updateMonthVisibility();
 }
@@ -355,7 +308,11 @@ function updateMonthVisibility() {
 
 function setPeriod(p) {
   period = p;
-  document.querySelectorAll('.period-btn').forEach((b,i) => b.classList.toggle('active', ['mois','trimestre','annee'][i] === p));
+  var btns = document.querySelectorAll('.period-btn');
+  var vals = ['mois','trimestre','annee'];
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].classList.toggle('active', vals[i] === p);
+  }
   updateMonthVisibility();
   onPeriodChange();
 }
@@ -367,57 +324,59 @@ function onPeriodChange() {
 }
 
 function filterSessions() {
-  const year = parseInt(document.getElementById('sel-year').value);
-  const month = parseInt(document.getElementById('sel-month').value);
+  var year = parseInt(document.getElementById('sel-year').value);
+  var month = parseInt(document.getElementById('sel-month').value);
 
   if (period === 'mois') {
-    filteredSessions = allSessions.filter(s => {
-      const [y,m] = s.date.split('-');
-      return parseInt(y) === year && parseInt(m) === month + 1;
+    filteredSessions = allSessions.filter(function(s) {
+      var parts = s.date.split('-');
+      return parseInt(parts[0]) === year && parseInt(parts[1]) === month + 1;
     });
   } else if (period === 'trimestre') {
-    const trimStart = Math.floor(month / 3) * 3;
-    filteredSessions = allSessions.filter(s => {
-      const [y,m] = s.date.split('-');
-      return parseInt(y) === year && parseInt(m)-1 >= trimStart && parseInt(m)-1 <= trimStart+2;
+    var trimStart = Math.floor(month / 3) * 3;
+    filteredSessions = allSessions.filter(function(s) {
+      var parts = s.date.split('-');
+      var m = parseInt(parts[1]) - 1;
+      return parseInt(parts[0]) === year && m >= trimStart && m <= trimStart + 2;
     });
   } else {
-    filteredSessions = allSessions.filter(s => parseInt(s.date.split('-')[0]) === year);
+    filteredSessions = allSessions.filter(function(s) {
+      return parseInt(s.date.split('-')[0]) === year;
+    });
   }
-  filteredSessions.sort((a,b) => a.date.localeCompare(b.date));
+  filteredSessions.sort(function(a, b) { return a.date.localeCompare(b.date); });
 
-  filteredSessions.forEach((s) => {
-    const key = s.date + '_' + s.formation;
+  filteredSessions.forEach(function(s) {
+    var key = s.date + '_' + s.formation;
     if (!participants[key]) {
-      const d = F_DEFAULTS[s.formation] || [5,7,10];
+      var d = F_DEFAULTS[s.formation] || [5,7,10];
       participants[key] = { p: d[0], m: d[1], o: d[2], cancelled_p: false, cancelled_m: false, cancelled_o: false };
     }
   });
 }
 
 function buildSessionsTable() {
-  const tbody = document.getElementById('sessions-tbody');
+  var tbody = document.getElementById('sessions-tbody');
   if (filteredSessions.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--muted);">Aucune session sur cette période.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--muted);">Aucune session sur cette periode.</td></tr>';
     return;
   }
-
-  tbody.innerHTML = filteredSessions.map((s) => {
-    const f = FORMATIONS[s.formation];
-    const key = s.date + '_' + s.formation;
-    const p = participants[key];
-    const rowStyle = (p.cancelled_p && p.cancelled_m && p.cancelled_o) ? 'opacity:.4;' : '';
-    return `<tr style="${rowStyle}">
-      <td class="date-cell">${fmtDate(s.date)}</td>
-      <td><span class="f-badge" style="background:${f.color}22;color:${f.color}">${f.label}</span></td>
-      <td style="color:var(--muted);font-size:12px;">${f.jours}j</td>
-      <td class="sc-cell"><input type="number" class="pess-in" value="${p.p}" min="1" max="30" oninput="onPartChange('${key}','p',this.value)" ${p.cancelled_p?'disabled style="opacity:.3;"':''}></td>
-      <td class="sc-cell" title="Annuler pour ce scénario"><input type="checkbox" ${p.cancelled_p?'checked':''} onchange="onCancel('${key}','p',this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:var(--pess);"></td>
-      <td class="sc-cell"><input type="number" class="moy-in" value="${p.m}" min="1" max="30" oninput="onPartChange('${key}','m',this.value)" ${p.cancelled_m?'disabled style="opacity:.3;"':''}></td>
-      <td class="sc-cell" title="Annuler pour ce scénario"><input type="checkbox" ${p.cancelled_m?'checked':''} onchange="onCancel('${key}','m',this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:var(--moy);"></td>
-      <td class="sc-cell"><input type="number" class="opti-in" value="${p.o}" min="1" max="30" oninput="onPartChange('${key}','o',this.value)" ${p.cancelled_o?'disabled style="opacity:.3;"':''}></td>
-      <td class="sc-cell" title="Annuler pour ce scénario"><input type="checkbox" ${p.cancelled_o?'checked':''} onchange="onCancel('${key}','o',this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:var(--opti);"></td>
-    </tr>`;
+  tbody.innerHTML = filteredSessions.map(function(s) {
+    var f = FORMATIONS[s.formation];
+    var key = s.date + '_' + s.formation;
+    var p = participants[key];
+    var rowStyle = (p.cancelled_p && p.cancelled_m && p.cancelled_o) ? 'opacity:.4;' : '';
+    return '<tr style="' + rowStyle + '">' +
+      '<td class="date-cell">' + fmtDate(s.date) + '</td>' +
+      '<td><span class="f-badge" style="background:' + f.color + '22;color:' + f.color + '">' + f.label + '</span></td>' +
+      '<td style="color:var(--muted);font-size:12px;">' + f.jours + 'j</td>' +
+      '<td class="sc-cell"><input type="number" class="pess-in" value="' + p.p + '" min="1" max="30" oninput="onPartChange(\'' + key + '\',\'p\',this.value)"' + (p.cancelled_p ? ' disabled style="opacity:.3;"' : '') + '></td>' +
+      '<td class="sc-cell"><input type="checkbox"' + (p.cancelled_p ? ' checked' : '') + ' onchange="onCancel(\'' + key + '\',\'p\',this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:var(--pess);"></td>' +
+      '<td class="sc-cell"><input type="number" class="moy-in" value="' + p.m + '" min="1" max="30" oninput="onPartChange(\'' + key + '\',\'m\',this.value)"' + (p.cancelled_m ? ' disabled style="opacity:.3;"' : '') + '></td>' +
+      '<td class="sc-cell"><input type="checkbox"' + (p.cancelled_m ? ' checked' : '') + ' onchange="onCancel(\'' + key + '\',\'m\',this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:var(--moy);"></td>' +
+      '<td class="sc-cell"><input type="number" class="opti-in" value="' + p.o + '" min="1" max="30" oninput="onPartChange(\'' + key + '\',\'o\',this.value)"' + (p.cancelled_o ? ' disabled style="opacity:.3;"' : '') + '></td>' +
+      '<td class="sc-cell"><input type="checkbox"' + (p.cancelled_o ? ' checked' : '') + ' onchange="onCancel(\'' + key + '\',\'o\',this.checked)" style="width:16px;height:16px;cursor:pointer;accent-color:var(--opti);"></td>' +
+      '</tr>';
   }).join('');
 }
 
@@ -435,307 +394,281 @@ function onPartChange(key, sc, val) {
 }
 
 function getPeriodLabel() {
-  const year = parseInt(document.getElementById('sel-year').value);
-  const month = parseInt(document.getElementById('sel-month').value);
+  var year = parseInt(document.getElementById('sel-year').value);
+  var month = parseInt(document.getElementById('sel-month').value);
   if (period === 'mois') return MOIS_FR[month] + ' ' + year;
   if (period === 'trimestre') return 'T' + (Math.floor(month/3)+1) + ' ' + year;
-  return 'Année ' + year;
+  return 'Annee ' + year;
 }
 
 function renderResults() {
-  if (filteredSessions.length === 0) {
-    document.getElementById('results-section').innerHTML = '';
-    return;
-  }
+  var section = document.getElementById('results-section');
+  if (filteredSessions.length === 0) { section.innerHTML = ''; return; }
 
-  const obj = v('obj_marge');
-  const label = getPeriodLabel();
+  var obj = v('obj_marge');
+  var label = getPeriodLabel();
+  var totals = {};
 
-  const totals = {};
-  SC.forEach(ps => {
+  SC.forEach(function(ps) {
     totals[ps] = {};
-    SC.forEach(cs => {
-      let tCA = 0, tCh = 0;
-      filteredSessions.forEach(s => {
-        const key = s.date + '_' + s.formation;
-        const n = participants[key]?.[ps] || 5;
-        const cancelled = participants[key]?.['cancelled_' + ps] || false;
-        const r = calcSession(s, n, cs, cancelled);
+    SC.forEach(function(cs) {
+      var tCA = 0, tCh = 0;
+      filteredSessions.forEach(function(s) {
+        var key = s.date + '_' + s.formation;
+        var n = (participants[key] && participants[key][ps]) ? participants[key][ps] : 5;
+        var cancelled = participants[key] ? (participants[key]['cancelled_' + ps] || false) : false;
+        var r = calcSession(s, n, cs, cancelled);
         tCA += r.ca; tCh += r.charges;
       });
       totals[ps][cs] = { ca: tCA, charges: tCh, marge: tCA - tCh };
     });
   });
 
-  const kpiHTML = `
-    <div class="kpi-grid">
-      ${SC.map((sc, si) => {
-        const t = totals[sc][sc];
-        return `<div class="kpi-card" style="border-top:3px solid ${SC_COLORS[si]};">
-          <div class="kpi-label" style="color:${SC_COLORS[si]};">${['▼','◆','▲'][si]} Tout ${SC_LABELS[si]}</div>
-          <div class="kpi-row"><span class="kpi-name">Sessions</span><span class="kpi-val">${filteredSessions.length}</span></div>
-          <div class="kpi-row"><span class="kpi-name">CA HT</span><span class="kpi-val" style="color:#185FA5;">${eur(t.ca)}</span></div>
-          <div class="kpi-row"><span class="kpi-name">Charges HT</span><span class="kpi-val" style="color:var(--pess);">${eur(t.charges)}</span></div>
-          <div class="kpi-row"><span class="kpi-name">Marge brute HT</span><span class="kpi-val ${t.marge>=0?'pos':'neg'}">${eur(t.marge)}</span></div>
-          <div style="margin-top:8px;">${t.marge >= obj ? '<span class="obj-badge obj-ok">✓ Objectif atteint</span>' : '<span class="obj-badge obj-ko">✗ Objectif non atteint</span>'}</div>
-        </div>`;
-      }).join('')}
-    </div>`;
+  var kpiHTML = '<div class="kpi-grid">';
+  SC.forEach(function(sc, si) {
+    var t = totals[sc][sc];
+    kpiHTML += '<div class="kpi-card" style="border-top:3px solid ' + SC_COLORS[si] + ';">' +
+      '<div class="kpi-label" style="color:' + SC_COLORS[si] + ';">' + SC_LABELS[si] + '</div>' +
+      '<div class="kpi-row"><span class="kpi-name">Sessions</span><span class="kpi-val">' + filteredSessions.length + '</span></div>' +
+      '<div class="kpi-row"><span class="kpi-name">CA HT</span><span class="kpi-val" style="color:#185FA5;">' + eur(t.ca) + '</span></div>' +
+      '<div class="kpi-row"><span class="kpi-name">Charges HT</span><span class="kpi-val" style="color:var(--pess);">' + eur(t.charges) + '</span></div>' +
+      '<div class="kpi-row"><span class="kpi-name">Marge brute HT</span><span class="kpi-val ' + (t.marge >= 0 ? 'pos' : 'neg') + '">' + eur(t.marge) + '</span></div>' +
+      '<div style="margin-top:8px;">' + (t.marge >= obj ? '<span class="obj-badge obj-ok">Objectif atteint</span>' : '<span class="obj-badge obj-ko">Objectif non atteint</span>') + '</div>' +
+      '</div>';
+  });
+  kpiHTML += '</div>';
 
-  const refMarge = totals['m']['m'].marge;
-  let matrixRows = '';
-  SC.forEach((ps, pi) => {
-    matrixRows += `<tr${pi===1?' class="highlight-cell"':''}>`;
-    matrixRows += `<td style="font-weight:600;color:${SC_COLORS[pi]};">${['▼','◆','▲'][pi]} Participants ${SC_LABELS[pi]}</td>`;
-    SC.forEach((cs, ci) => {
-      const t = totals[ps][cs];
-      const delta = t.marge - refMarge;
-      const isRef = pi===1 && ci===1;
-      matrixRows += `<td class="${isRef?'highlight-cell':''}" style="border-left:2px solid ${SC_COLORS[ci]}22;">
-        <div class="matrix-cell">
-          <div class="result-val ${t.marge>=0?'pos':'neg'}">${eur(t.marge)}</div>
-          ${!isRef ? `<span class="delta-badge ${delta>=0?'delta-pos':'delta-neg'}">${delta>=0?'+':''}${eur(delta)}</span>` : '<span style="font-size:10px;color:var(--muted);">référence</span>'}
-          <span class="obj-badge ${t.marge>=obj?'obj-ok':'obj-ko'}">${t.marge>=obj?'✓ Objectif':'✗ Insuffisant'}</span>
-        </div>
-      </td>`;
+  var refMarge = totals['m']['m'].marge;
+  var matrixRows = '';
+  SC.forEach(function(ps, pi) {
+    matrixRows += '<tr>';
+    matrixRows += '<td style="font-weight:600;color:' + SC_COLORS[pi] + ';">Participants ' + SC_LABELS[pi] + '</td>';
+    SC.forEach(function(cs, ci) {
+      var t = totals[ps][cs];
+      var delta = t.marge - refMarge;
+      var isRef = pi === 1 && ci === 1;
+      matrixRows += '<td style="border-left:2px solid ' + SC_COLORS[ci] + '22;">' +
+        '<div class="matrix-cell">' +
+        '<div class="result-val ' + (t.marge >= 0 ? 'pos' : 'neg') + '">' + eur(t.marge) + '</div>' +
+        (isRef ? '<span style="font-size:10px;color:var(--muted);">reference</span>' : '<span class="delta-badge ' + (delta >= 0 ? 'delta-pos' : 'delta-neg') + '">' + (delta >= 0 ? '+' : '') + eur(delta) + '</span>') +
+        '<span class="obj-badge ' + (t.marge >= obj ? 'obj-ok' : 'obj-ko') + '">' + (t.marge >= obj ? 'Objectif' : 'Insuffisant') + '</span>' +
+        '</div></td>';
     });
     matrixRows += '</tr>';
   });
 
-  let detailRows = filteredSessions.map(s => {
-    const f = FORMATIONS[s.formation];
-    const key = s.date + '_' + s.formation;
-    const cells = SC.map((sc, si) => {
-      const n = participants[key]?.[sc] || 5;
-      const cancelled = participants[key]?.['cancelled_' + sc] || false;
-      const r = calcSession(s, n, sc, cancelled);
+  var detailRows = filteredSessions.map(function(s) {
+    var f = FORMATIONS[s.formation];
+    var key = s.date + '_' + s.formation;
+    var cells = SC.map(function(sc, si) {
+      var n = (participants[key] && participants[key][sc]) ? participants[key][sc] : 5;
+      var cancelled = participants[key] ? (participants[key]['cancelled_' + sc] || false) : false;
+      var r = calcSession(s, n, sc, cancelled);
       if (cancelled) {
-        return `<td style="border-left:2px solid ${SC_COLORS[si]}22;background:#F5F5F5;">
-          <div style="color:#aaa;font-size:12px;font-style:italic;">🚫 Annulée</div>
-          <div class="result-sub">0 € CA · 0 € charges</div>
-        </td>`;
+        return '<td style="border-left:2px solid ' + SC_COLORS[si] + '22;background:#F5F5F5;"><div style="color:#aaa;font-size:12px;">Annulee</div></td>';
       }
-      return `<td style="border-left:2px solid ${SC_COLORS[si]}22;">
-        <div class="result-val ${r.marge>=0?'pos':'neg'}">${eur(r.marge)}</div>
-        <div class="result-sub">${n} pers · ${eur(r.ca)} CA</div>
-      </td>`;
+      return '<td style="border-left:2px solid ' + SC_COLORS[si] + '22;">' +
+        '<div class="result-val ' + (r.marge >= 0 ? 'pos' : 'neg') + '">' + eur(r.marge) + '</div>' +
+        '<div class="result-sub">' + n + ' pers - ' + eur(r.ca) + ' CA</div></td>';
     }).join('');
-    return `<tr>
-      <td class="date-cell">${fmtDate(s.date)}</td>
-      <td><span class="f-badge" style="background:${f.color}22;color:${f.color};">${f.label}</span></td>
-      ${cells}
-    </tr>`;
+    return '<tr><td class="date-cell">' + fmtDate(s.date) + '</td>' +
+      '<td><span class="f-badge" style="background:' + f.color + '22;color:' + f.color + ';">' + f.label + '</span></td>' +
+      cells + '</tr>';
   }).join('');
 
-  detailRows += `<tr class="subtotal-row">
-    <td colspan="2">TOTAL ${label.toUpperCase()}</td>
-    ${SC.map((sc, si) => {
-      const t = totals[sc][sc];
-      return `<td style="border-left:2px solid ${SC_COLORS[si]}22;">
-        <div class="result-val ${t.marge>=0?'pos':'neg'}">${eur(t.marge)}</div>
-        <div class="result-sub">CA: ${eur(t.ca)}</div>
-      </td>`;
-    }).join('')}
-  </tr>`;
+  detailRows += '<tr class="subtotal-row"><td colspan="2">TOTAL ' + label.toUpperCase() + '</td>';
+  SC.forEach(function(sc, si) {
+    var t = totals[sc][sc];
+    detailRows += '<td style="border-left:2px solid ' + SC_COLORS[si] + '22;">' +
+      '<div class="result-val ' + (t.marge >= 0 ? 'pos' : 'neg') + '">' + eur(t.marge) + '</div>' +
+      '<div class="result-sub">CA: ' + eur(t.ca) + '</div></td>';
+  });
+  detailRows += '</tr>';
 
-  document.getElementById('results-section').innerHTML = `
-    <div class="card">
-      <div class="card-title">Synthèse — ${label}</div>
-      ${kpiHTML}
-    </div>
+  var scHeaders = SC.map(function(sc, si) {
+    return '<th class="sc" style="color:' + SC_COLORS[si] + ';">' + SC_LABELS[si] + '</th>';
+  }).join('');
 
-    <div class="card">
-      <div class="card-title">Matrice de décision 3×3 — Marge brute HT — ${label}</div>
-      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Lignes = niveau de participants · Colonnes = niveau de charges · Delta vs scénario moyen/moyen</div>
-      <div class="matrix-wrap">
-        <table class="matrix-table">
-          <thead>
-            <tr>
-              <th></th>
-              ${SC.map((sc,si) => `<th style="color:${SC_COLORS[si]};border-bottom:2px solid ${SC_COLORS[si]};">${['▼','◆','▲'][si]} Charges ${SC_LABELS[si]}</th>`).join('')}
-            </tr>
-          </thead>
-          <tbody>${matrixRows}</tbody>
-        </table>
-      </div>
-    </div>
+  var matrixHeaders = SC.map(function(sc, si) {
+    return '<th style="color:' + SC_COLORS[si] + ';border-bottom:2px solid ' + SC_COLORS[si] + ';">Charges ' + SC_LABELS[si] + '</th>';
+  }).join('');
 
-    <div class="card">
-      <div class="card-title">Détail par session — 3 scénarios diagonaux — ${label}</div>
-      <div style="overflow-x:auto;">
-        <table class="sessions-table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Formation</th>
-              ${SC.map((sc,si) => `<th class="sc" style="color:${SC_COLORS[si]};">${['▼','◆','▲'][si]} ${SC_LABELS[si]}</th>`).join('')}
-            </tr>
-          </thead>
-          <tbody>${detailRows}</tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="charts-row">
-      <div class="chart-box">
-        <h3>Marge par session — 3 scénarios</h3>
-        <div class="legend">
-          ${SC.map((sc,si) => `<div class="legend-item"><div class="legend-dot" style="background:${SC_COLORS[si]}"></div>${SC_LABELS[si]}</div>`).join('')}
-        </div>
-        <div class="chart-wrap"><canvas id="chart-marge"></canvas></div>
-      </div>
-      <div class="chart-box">
-        <h3>Matrice — Marge totale par combinaison</h3>
-        <div class="chart-wrap"><canvas id="chart-matrix"></canvas></div>
-      </div>
-    </div>
-  `;
+  section.innerHTML =
+    '<div class="card"><div class="card-title">Synthese - ' + label + '</div>' + kpiHTML + '</div>' +
+    '<div class="card"><div class="card-title">Matrice 3x3 - Marge brute HT - ' + label + '</div>' +
+    '<div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Lignes = participants - Colonnes = charges - Delta vs scenario moyen/moyen</div>' +
+    '<div class="matrix-wrap"><table class="matrix-table"><thead><tr><th></th>' + matrixHeaders + '</tr></thead><tbody>' + matrixRows + '</tbody></table></div></div>' +
+    '<div class="card"><div class="card-title">Detail par session - ' + label + '</div>' +
+    '<div style="overflow-x:auto;"><table class="sessions-table"><thead><tr><th>Date</th><th>Formation</th>' + scHeaders + '</tr></thead><tbody>' + detailRows + '</tbody></table></div></div>' +
+    '<div class="charts-row">' +
+    '<div class="chart-box"><h3>Marge par session - 3 scenarios</h3><div class="chart-wrap"><canvas id="chart-marge"></canvas></div></div>' +
+    '<div class="chart-box"><h3>Matrice - Marge totale par combinaison</h3><div class="chart-wrap"><canvas id="chart-matrix"></canvas></div>' +
+    '</div></div>';
 
   drawCharts(filteredSessions, totals);
 }
 
 function drawCharts(sessions, totals) {
-  if (chartMarge) chartMarge.destroy();
-  if (chartDiag) chartDiag.destroy();
+  if (chartMarge) { chartMarge.destroy(); chartMarge = null; }
+  if (chartDiag) { chartDiag.destroy(); chartDiag = null; }
 
-  const labels = sessions.map(s => fmtDate(s.date) + ' · ' + FORMATIONS[s.formation].label.substring(0,8));
+  var labels = sessions.map(function(s) { return fmtDate(s.date) + ' - ' + FORMATIONS[s.formation].label.substring(0,8); });
+
   chartMarge = new Chart(document.getElementById('chart-marge'), {
     type: 'bar',
     data: {
-      labels,
-      datasets: SC.map((sc, si) => ({
-        label: SC_LABELS[si],
-        data: sessions.map(s => {
-          const key = s.date + '_' + s.formation;
-          const n = participants[key]?.[sc] || 5;
-          const cancelled = participants[key]?.['cancelled_' + sc] || false;
-          return Math.round(calcSession(s, n, sc, cancelled).marge);
-        }),
-        backgroundColor: SC_COLORS[si] + 'BB',
-        borderColor: SC_COLORS[si],
-        borderWidth: 1,
-      }))
+      labels: labels,
+      datasets: SC.map(function(sc, si) {
+        return {
+          label: SC_LABELS[si],
+          data: sessions.map(function(s) {
+            var key = s.date + '_' + s.formation;
+            var n = (participants[key] && participants[key][sc]) ? participants[key][sc] : 5;
+            var cancelled = participants[key] ? (participants[key]['cancelled_' + sc] || false) : false;
+            return Math.round(calcSession(s, n, sc, cancelled).marge);
+          }),
+          backgroundColor: SC_COLORS[si] + 'BB',
+          borderColor: SC_COLORS[si],
+          borderWidth: 1
+        };
+      })
     },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: { x: { ticks: { font: { size: 10 } } }, y: { ticks: { callback: v => Math.round(v).toLocaleString('fr-FR') + ' €' } } }
-    }
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
   });
 
-  const matrixLabels = SC.map((ps, pi) => SC_LABELS[pi] + ' (part.)');
-  const matrixData = SC.map((cs, ci) => ({
-    label: 'Charges ' + SC_LABELS[ci],
-    data: SC.map(ps => Math.round(totals[ps][cs].marge)),
-    backgroundColor: SC_COLORS[ci] + 'BB',
-    borderColor: SC_COLORS[ci],
-    borderWidth: 1,
-  }));
-
+  var matrixLabels = SC_LABELS.map(function(l) { return l + ' (part.)'; });
   chartDiag = new Chart(document.getElementById('chart-matrix'), {
     type: 'bar',
-    data: { labels: matrixLabels, datasets: matrixData },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: { x: { grid: { display: false } }, y: { ticks: { callback: v => Math.round(v).toLocaleString('fr-FR') + ' €' } } }
-    }
+    data: {
+      labels: matrixLabels,
+      datasets: SC.map(function(cs, ci) {
+        return {
+          label: 'Charges ' + SC_LABELS[ci],
+          data: SC.map(function(ps) { return Math.round(totals[ps][cs].marge); }),
+          backgroundColor: SC_COLORS[ci] + 'BB',
+          borderColor: SC_COLORS[ci],
+          borderWidth: 1
+        };
+      })
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
   });
 }
 
-// ─── SAUVEGARDE ───────────────────────────────────────────────────────────────
-async function saveParams() {
-  const btn = document.getElementById('btn-save');
-  btn.textContent = '💾 Sauvegarde...';
+function saveParams() {
+  var btn = document.getElementById('btn-save');
+  btn.textContent = 'Sauvegarde...';
   btn.disabled = true;
 
-  // On ne sauvegarde que les charges et l'objectif
-  // (Notion limite les champs Rich Text à 2000 caractères — participantsParSession dépasse cette limite)
-  const params = {
+  var params = {
     charges: {
       prix_p: v('c_prix_p'), prix_m: v('c_prix_m'), prix_o: v('c_prix_o'),
       loyer_p: v('c_loyer_p'), loyer_m: v('c_loyer_m'), loyer_o: v('c_loyer_o'),
       repas_p: v('c_repas_p'), repas_m: v('c_repas_m'), repas_o: v('c_repas_o'),
       pub_p: v('c_pub_p'), pub_m: v('c_pub_m'), pub_o: v('c_pub_o'),
       admin_p: v('c_admin_p'), admin_m: v('c_admin_m'), admin_o: v('c_admin_o'),
-      qual_p: v('c_qual_p'), qual_m: v('c_qual_m'), qual_o: v('c_qual_o'),
+      qual_p: v('c_qual_p'), qual_m: v('c_qual_m'), qual_o: v('c_qual_o')
     },
-    objectif: v('obj_marge'),
+    objectif: v('obj_marge')
   };
 
-  const jsonStr = JSON.stringify(params);
-  console.log('Taille JSON sauvegardé :', jsonStr.length, 'caractères');
-
-  try {
-    await fetch(WEBHOOK_SAVE_PARAMS, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ params: jsonStr })
-    });
-    btn.textContent = '✅ Sauvegardé !';
-    setTimeout(() => { btn.textContent = '💾 Sauvegarder'; btn.disabled = false; }, 2000);
-  } catch(e) {
+  fetch(WEBHOOK_SAVE_PARAMS, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ params: JSON.stringify(params) })
+  }).then(function() {
+    btn.textContent = 'Sauvegarde OK';
+    setTimeout(function() { btn.textContent = 'Sauvegarder'; btn.disabled = false; }, 2000);
+  }).catch(function(e) {
     console.error('Erreur sauvegarde:', e);
-    btn.textContent = '❌ Erreur';
-    setTimeout(() => { btn.textContent = '💾 Sauvegarder'; btn.disabled = false; }, 2000);
-  }
+    btn.textContent = 'Erreur';
+    setTimeout(function() { btn.textContent = 'Sauvegarder'; btn.disabled = false; }, 2000);
+  });
 }
 
-// ─── CHARGEMENT ───────────────────────────────────────────────────────────────
-async function loadParams() {
-  try {
-    const res = await fetch(WEBHOOK_GET_PARAMS, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    });
-    const data = await res.json();
-
-    // Le webhook retourne un tableau [{params: "..."}] ou un objet {params: "..."}
-    const raw = Array.isArray(data) ? data[0]?.params : data.params;
+function loadParams() {
+  fetch(WEBHOOK_GET_PARAMS, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  }).then(function(res) {
+    return res.json();
+  }).then(function(data) {
+    var raw = Array.isArray(data) ? data[0].params : data.params;
     if (!raw || raw === '{}') return;
-    const params = typeof raw === 'string' ? JSON.parse(raw) : raw;
+    var params = typeof raw === 'string' ? JSON.parse(raw) : raw;
 
-    // Restaurer les charges
     if (params.charges) {
-      Object.entries(params.charges).forEach(([key, val]) => {
-        const el = document.getElementById('c_' + key);
-        if (el) el.value = val;
+      Object.keys(params.charges).forEach(function(key) {
+        var el = document.getElementById('c_' + key);
+        if (el) el.value = params.charges[key];
       });
     }
-
-    // Restaurer l'objectif
-    if (params.objectif) document.getElementById('obj_marge').value = params.objectif;
-
-    // Restaurer les participants par session (clé = date_formation) directement dans l'objet mémoire
-    if (params.participantsParSession) {
-      Object.entries(params.participantsParSession).forEach(([key, vals]) => {
-        if (participants[key]) {
-          // La session existe dans la période filtrée : on restaure
-          if (vals.p != null) participants[key].p = vals.p;
-          if (vals.m != null) participants[key].m = vals.m;
-          if (vals.o != null) participants[key].o = vals.o;
-          if (vals.cancelled_p != null) participants[key].cancelled_p = vals.cancelled_p;
-          if (vals.cancelled_m != null) participants[key].cancelled_m = vals.cancelled_m;
-          if (vals.cancelled_o != null) participants[key].cancelled_o = vals.cancelled_o;
-        } else {
-          // La session n'est pas dans la période mais on la garde en mémoire pour plus tard
-          participants[key] = {
-            p: vals.p ?? 5,
-            m: vals.m ?? 7,
-            o: vals.o ?? 10,
-            cancelled_p: vals.cancelled_p || false,
-            cancelled_m: vals.cancelled_m || false,
-            cancelled_o: vals.cancelled_o || false,
-          };
-        }
-      });
+    if (params.objectif) {
+      document.getElementById('obj_marge').value = params.objectif;
     }
-
     buildSessionsTable();
     renderResults();
-  } catch(e) {
+  }).catch(function(e) {
     console.error('Erreur chargement params:', e);
-  }
+  });
 }
 
-// ─── INIT ─────────────────────────────────────────────�
+function loadSessionsFromNotion() {
+  var btn = document.getElementById('btn-refresh');
+  if (btn) { btn.textContent = 'Chargement...'; btn.disabled = true; }
+
+  fetch(WEBHOOK_URL, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  }).then(function(res) {
+    return res.json();
+  }).then(function(data) {
+    var raw = Array.isArray(data) ? data : (data.sessions || []);
+    allSessions = raw.map(function(s) {
+      return {
+        date: s.date,
+        formation: Object.keys(FORMATIONS).find(function(k) { return FORMATIONS[k].label === s.formation; }) || 'n1',
+        stagiaires: s.nb_inscrits || 0,
+        places_max: s.places_max || 10,
+        statut: s.statut || 'Planifiee',
+        notion_id: s.id
+      };
+    }).filter(function(s) { return s.date; });
+
+    var years = [];
+    allSessions.forEach(function(s) {
+      var y = parseInt(s.date.split('-')[0]);
+      if (years.indexOf(y) === -1) years.push(y);
+    });
+    var curYear = new Date().getFullYear();
+    if (years.indexOf(curYear) === -1) years.push(curYear);
+    years.sort();
+    var selYear = document.getElementById('sel-year');
+    selYear.innerHTML = years.map(function(y) {
+      return '<option value="' + y + '"' + (y === curYear ? ' selected' : '') + '>' + y + '</option>';
+    }).join('');
+
+    if (btn) { btn.textContent = 'Actualiser'; btn.disabled = false; }
+    filterSessions();
+    buildSessionsTable();
+    renderResults();
+  }).catch(function(e) {
+    console.error('Erreur chargement Notion:', e);
+    if (btn) { btn.textContent = 'Actualiser'; btn.disabled = false; }
+    allSessions = [];
+    filterSessions();
+    buildSessionsTable();
+    renderResults();
+  });
+}
+
+function init() {
+  initSelectors();
+  loadSessionsFromNotion();
+  setTimeout(function() { loadParams(); }, 1500);
+}
+
+init();
+</script>
+</body>
+</html>
