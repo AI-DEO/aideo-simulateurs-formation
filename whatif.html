@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tableau What If — AIDEO</title>
+<title>Tableau What If - AIDEO</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -224,9 +224,9 @@ footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted)
   </div>
 </div>
 
-<footer>AIDEO 2026 - Frederic Ruault - contact@aideo.fr</footer>
+<footer>AIDEO 2026 - Frederic Ruault - <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="33505c5d4752504773525a57565c1d5541">[email&#160;protected]</a></footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 var WEBHOOK_URL = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-sessions';
 var WEBHOOK_GET_PARAMS = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-whatif-params';
 var WEBHOOK_SAVE_PARAMS = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-whatif-save';
@@ -560,6 +560,27 @@ function saveParams() {
   btn.textContent = 'Sauvegarde...';
   btn.disabled = true;
 
+  // Collecter les participants par type de formation
+  var parts = {};
+  Object.keys(FORMATIONS).forEach(function(fKey) {
+    var vals = { p: null, m: null, o: null };
+    filteredSessions.forEach(function(s) {
+      if (s.formation === fKey) {
+        var key = s.date + '_' + s.formation;
+        if (participants[key]) {
+          vals.p = participants[key].p;
+          vals.m = participants[key].m;
+          vals.o = participants[key].o;
+        }
+      }
+    });
+    parts[fKey] = {
+      p: vals.p !== null ? vals.p : F_DEFAULTS[fKey][0],
+      m: vals.m !== null ? vals.m : F_DEFAULTS[fKey][1],
+      o: vals.o !== null ? vals.o : F_DEFAULTS[fKey][2]
+    };
+  });
+
   var params = {
     charges: {
       prix_p: v('c_prix_p'), prix_m: v('c_prix_m'), prix_o: v('c_prix_o'),
@@ -569,7 +590,8 @@ function saveParams() {
       admin_p: v('c_admin_p'), admin_m: v('c_admin_m'), admin_o: v('c_admin_o'),
       qual_p: v('c_qual_p'), qual_m: v('c_qual_m'), qual_o: v('c_qual_o')
     },
-    objectif: v('obj_marge')
+    objectif: v('obj_marge'),
+    participants: parts
   };
 
   fetch(WEBHOOK_SAVE_PARAMS, {
@@ -606,6 +628,19 @@ function loadParams() {
     if (params.objectif) {
       document.getElementById('obj_marge').value = params.objectif;
     }
+
+    // Restaurer les participants dans toutes les sessions en memoire
+    if (params.participants) {
+      Object.keys(participants).forEach(function(sessionKey) {
+        var fKey = sessionKey.split('_')[1];
+        if (params.participants[fKey]) {
+          participants[sessionKey].p = params.participants[fKey].p;
+          participants[sessionKey].m = params.participants[fKey].m;
+          participants[sessionKey].o = params.participants[fKey].o;
+        }
+      });
+    }
+
     buildSessionsTable();
     renderResults();
   }).catch(function(e) {
@@ -656,19 +691,3 @@ function loadSessionsFromNotion() {
     console.error('Erreur chargement Notion:', e);
     if (btn) { btn.textContent = 'Actualiser'; btn.disabled = false; }
     allSessions = [];
-    filterSessions();
-    buildSessionsTable();
-    renderResults();
-  });
-}
-
-function init() {
-  initSelectors();
-  loadSessionsFromNotion();
-  setTimeout(function() { loadParams(); }, 1500);
-}
-
-init();
-</script>
-</body>
-</html>
