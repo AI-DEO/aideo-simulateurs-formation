@@ -114,8 +114,11 @@ footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted)
 <body>
 <header>
   <h1>AIDEO — Simulateurs Rentabilité</h1>
-  <div style="display:flex;align-items:center;gap:12px;"><span style="font-size:13px;color:var(--muted);">Sessions chargées depuis Notion</span><button id="btn-refresh" onclick="loadSessionsFromNotion()" style="padding:6px 14px;background:var(--orange);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;">↻ Actualiser</button>
-<button id="btn-save" onclick="saveParams()" style="padding:6px 14px;background:var(--turquoise);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;">💾 Sauvegarder</button></div>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span style="font-size:13px;color:var(--muted);">Sessions chargées depuis Notion</span>
+    <button id="btn-refresh" onclick="loadSessionsFromNotion()" style="padding:6px 14px;background:var(--orange);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;">↻ Actualiser</button>
+    <button id="btn-save" onclick="saveParams()" style="padding:6px 14px;background:var(--turquoise);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer;font-weight:600;">💾 Sauvegarder</button>
+  </div>
 </header>
 <nav>
   <a href="simulateur-1j.html">1 Journée</a>
@@ -261,7 +264,6 @@ async function loadSessionsFromNotion() {
       headers: { 'Content-Type': 'application/json' }
     });
     const data = await res.json();
-    // n8n retourne { result: "[...]" } où result est une chaîne JSON
     const raw = Array.isArray(data) ? data : (data.sessions || []);
     allSessions = raw.map(s => ({
       date: s.date,
@@ -303,7 +305,6 @@ const SC_BG = ['#FEF2F2','#FFF8F4','#F0FAF8'];
 let period = 'mois';
 let allSessions = [];
 let filteredSessions = [];
-// participants[sessionIdx][sc] = nb
 let participants = {};
 let chartMarge = null, chartDiag = null;
 
@@ -332,9 +333,8 @@ function calcSession(s, n, sc, cancelled) {
   return { ca, charges, marge: ca - charges, cancelled: false };
 }
 
-// Init sélecteurs année/mois
 function initSelectors() {
-  allSessions = JSON.parse(localStorage.getItem('aideo_sessions') || '[]');
+  allSessions = [];
   const years = [...new Set(allSessions.map(s => parseInt(s.date.split('-')[0])))].sort();
   if (!years.length) years.push(new Date().getFullYear());
 
@@ -386,13 +386,10 @@ function filterSessions() {
   }
   filteredSessions.sort((a,b) => a.date.localeCompare(b.date));
 
-  // Initialiser participants pour les nouvelles sessions
-  filteredSessions.forEach((s, i) => {
+  filteredSessions.forEach((s) => {
     const key = s.date + '_' + s.formation;
     if (!participants[key]) {
-      // Valeurs par défaut selon la formation
-      const defaults = { n1:[5,7,10], n2gpt:[4,6,8], n2cl:[4,6,8], rs:[5,7,9], crea:[3,5,7], notion:[4,6,8] };
-      const d = defaults[s.formation] || [5,7,10];
+      const d = F_DEFAULTS[s.formation] || [5,7,10];
       participants[key] = { p: d[0], m: d[1], o: d[2], cancelled_p: false, cancelled_m: false, cancelled_o: false };
     }
   });
@@ -401,11 +398,11 @@ function filterSessions() {
 function buildSessionsTable() {
   const tbody = document.getElementById('sessions-tbody');
   if (filteredSessions.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--muted);">Aucune session sur cette période.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--muted);">Aucune session sur cette période.</td></tr>';
     return;
   }
 
-  tbody.innerHTML = filteredSessions.map((s, i) => {
+  tbody.innerHTML = filteredSessions.map((s) => {
     const f = FORMATIONS[s.formation];
     const key = s.date + '_' + s.formation;
     const p = participants[key];
@@ -454,8 +451,6 @@ function renderResults() {
   const obj = v('obj_marge');
   const label = getPeriodLabel();
 
-  // Calculer totaux pour les 9 combinaisons
-  // totals[partSc][chargeSc] = { ca, charges, marge }
   const totals = {};
   SC.forEach(ps => {
     totals[ps] = {};
@@ -472,7 +467,6 @@ function renderResults() {
     });
   });
 
-  // KPI cards (3 scénarios diagonaux)
   const kpiHTML = `
     <div class="kpi-grid">
       ${SC.map((sc, si) => {
@@ -488,7 +482,6 @@ function renderResults() {
       }).join('')}
     </div>`;
 
-  // Matrice 3×3
   const refMarge = totals['m']['m'].marge;
   let matrixRows = '';
   SC.forEach((ps, pi) => {
@@ -509,7 +502,6 @@ function renderResults() {
     matrixRows += '</tr>';
   });
 
-  // Tableau détail par session (scénarios diagonaux)
   let detailRows = filteredSessions.map(s => {
     const f = FORMATIONS[s.formation];
     const key = s.date + '_' + s.formation;
@@ -535,7 +527,6 @@ function renderResults() {
     </tr>`;
   }).join('');
 
-  // Totaux détail
   detailRows += `<tr class="subtotal-row">
     <td colspan="2">TOTAL ${label.toUpperCase()}</td>
     ${SC.map((sc, si) => {
@@ -607,7 +598,6 @@ function drawCharts(sessions, totals) {
   if (chartMarge) chartMarge.destroy();
   if (chartDiag) chartDiag.destroy();
 
-  // Graphique 1 : marge par session pour les 3 scénarios diagonaux
   const labels = sessions.map(s => fmtDate(s.date) + ' · ' + FORMATIONS[s.formation].label.substring(0,8));
   chartMarge = new Chart(document.getElementById('chart-marge'), {
     type: 'bar',
@@ -633,8 +623,7 @@ function drawCharts(sessions, totals) {
     }
   });
 
-  // Graphique 2 : matrice 3×3 en barres groupées
-  const matrixLabels = SC.map(ps => SC_LABELS[SC.indexOf(ps)] + ' (part.)');
+  const matrixLabels = SC.map((ps, pi) => SC_LABELS[pi] + ' (part.)');
   const matrixData = SC.map((cs, ci) => ({
     label: 'Charges ' + SC_LABELS[ci],
     data: SC.map(ps => Math.round(totals[ps][cs].marge)),
@@ -654,7 +643,7 @@ function drawCharts(sessions, totals) {
   });
 }
 
-// Sauvegarde des paramètres dans Notion
+// ─── SAUVEGARDE ───────────────────────────────────────────────────────────────
 async function saveParams() {
   const btn = document.getElementById('btn-save');
   btn.textContent = '💾 Sauvegarde...';
@@ -670,20 +659,31 @@ async function saveParams() {
       qual_p: v('c_qual_p'), qual_m: v('c_qual_m'), qual_o: v('c_qual_o'),
     },
     objectif: v('obj_marge'),
-    participants: {}
+    // On sauvegarde les participants par clé session (date_formation) et par type formation
+    participants: {},
+    participantsParSession: {}
   };
 
-  // Sauvegarder les participants
-  Object.keys(FORMATIONS).forEach(key => {
-    params.participants[key] = {
-      p: v('n_' + key + '_pess') || F_DEFAULTS[key][0],
-      m: v('n_' + key + '_moy') || F_DEFAULTS[key][1],
-      o: v('n_' + key + '_opti') || F_DEFAULTS[key][2],
+  // Participants par type de formation (valeurs par défaut à restaurer)
+  Object.keys(FORMATIONS).forEach(fKey => {
+    const defaults = F_DEFAULTS[fKey] || [5,7,10];
+    params.participants[fKey] = { p: defaults[0], m: defaults[1], o: defaults[2] };
+  });
+
+  // Participants réels par session (clé = date_formation)
+  Object.entries(participants).forEach(([key, vals]) => {
+    params.participantsParSession[key] = {
+      p: vals.p,
+      m: vals.m,
+      o: vals.o,
+      cancelled_p: vals.cancelled_p || false,
+      cancelled_m: vals.cancelled_m || false,
+      cancelled_o: vals.cancelled_o || false,
     };
   });
 
   try {
-    const res = await fetch(WEBHOOK_SAVE_PARAMS, {
+    await fetch(WEBHOOK_SAVE_PARAMS, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ params: JSON.stringify(params) })
@@ -697,7 +697,7 @@ async function saveParams() {
   }
 }
 
-// Chargement des paramètres depuis Notion
+// ─── CHARGEMENT ───────────────────────────────────────────────────────────────
 async function loadParams() {
   try {
     const res = await fetch(WEBHOOK_GET_PARAMS, {
@@ -705,7 +705,9 @@ async function loadParams() {
       headers: { 'Content-Type': 'application/json' }
     });
     const data = await res.json();
-    const raw = data.params;
+
+    // Le webhook retourne un tableau [{params: "..."}] ou un objet {params: "..."}
+    const raw = Array.isArray(data) ? data[0]?.params : data.params;
     if (!raw || raw === '{}') return;
     const params = typeof raw === 'string' ? JSON.parse(raw) : raw;
 
@@ -720,23 +722,39 @@ async function loadParams() {
     // Restaurer l'objectif
     if (params.objectif) document.getElementById('obj_marge').value = params.objectif;
 
-    // Restaurer les participants
-    if (params.participants) {
-      Object.entries(params.participants).forEach(([fKey, vals]) => {
-        ['pess','moy','opti'].forEach((sc, si) => {
-          const el = document.getElementById('n_' + fKey + '_' + sc);
-          if (el) el.value = vals[['p','m','o'][si]] || el.value;
-        });
+    // Restaurer les participants par session (clé = date_formation) directement dans l'objet mémoire
+    if (params.participantsParSession) {
+      Object.entries(params.participantsParSession).forEach(([key, vals]) => {
+        if (participants[key]) {
+          // La session existe dans la période filtrée : on restaure
+          if (vals.p != null) participants[key].p = vals.p;
+          if (vals.m != null) participants[key].m = vals.m;
+          if (vals.o != null) participants[key].o = vals.o;
+          if (vals.cancelled_p != null) participants[key].cancelled_p = vals.cancelled_p;
+          if (vals.cancelled_m != null) participants[key].cancelled_m = vals.cancelled_m;
+          if (vals.cancelled_o != null) participants[key].cancelled_o = vals.cancelled_o;
+        } else {
+          // La session n'est pas dans la période mais on la garde en mémoire pour plus tard
+          participants[key] = {
+            p: vals.p ?? 5,
+            m: vals.m ?? 7,
+            o: vals.o ?? 10,
+            cancelled_p: vals.cancelled_p || false,
+            cancelled_m: vals.cancelled_m || false,
+            cancelled_o: vals.cancelled_o || false,
+          };
+        }
       });
     }
 
+    buildSessionsTable();
     renderResults();
   } catch(e) {
     console.error('Erreur chargement params:', e);
   }
 }
 
-// Init
+// ─── INIT ─────────────────────────────────────────────────────────────────────
 async function init() {
   initSelectors();
   await loadSessionsFromNotion();
