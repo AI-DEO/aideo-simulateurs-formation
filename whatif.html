@@ -174,8 +174,8 @@ footer{text-align:center;padding:24px;font-size:12px;color:var(--muted);border-t
     <div id="results-section"></div>
   </div>
 </div>
-<footer>AIDEO 2026 - Frederic Ruault - contact@aideo.fr</footer>
-<script>
+<footer>AIDEO 2026 - Frederic Ruault - <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="177478796376746357767e737278397165">[email&#160;protected]</a></footer>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 var WH_SESSIONS = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-sessions';
 var WH_GET = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-whatif-params';
 var WH_SAVE = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-whatif-save';
@@ -183,8 +183,8 @@ var FORMATIONS = {
   n1:{label:'ChatGPT / Claude N1',jours:1,color:'#378ADD'},
   n2gpt:{label:'ChatGPT N2',jours:1,color:'#5B4DB5'},
   n2cl:{label:'Claude N2',jours:1,color:'#9B3DA5'},
-  rs:{label:'Reseaux Sociaux et IA',jours:2,color:'#E87722'},
-  crea:{label:'Crea Image et Video',jours:1,color:'#D85A30'},
+  rs:{label:'Réseaux Sociaux & IA',jours:2,color:'#E87722'},
+  crea:{label:'Créa Image & Vidéo',jours:1,color:'#D85A30'},
   notion:{label:'Notion pour les pros',jours:2,color:'#00A99D'}
 };
 var MOIS = ['Janvier','Fevrier','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre'];
@@ -430,12 +430,4 @@ document.getElementById('btn-annee').addEventListener('click',function(){setPeri
 document.getElementById('sel-year').addEventListener('change',function(){filterS();buildT();renderR();});
 document.getElementById('sel-month').addEventListener('change',function(){filterS();buildT();renderR();});
 document.getElementById('obj_marge').addEventListener('input',function(){renderR();});
-document.querySelectorAll('.charges-table input').forEach(function(el){el.addEventListener('input',function(){renderR();});});
-
-// Init
-initSel();
-loadSessionsFromNotion();
-setTimeout(function(){loadParams();},1500);
-</script>
-</body>
-</html>
+document.queryS
