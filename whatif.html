@@ -248,9 +248,9 @@ footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted)
   </div>
 </div>
 
-<footer>AIDEO © 2026 — Frédéric Ruault — contact@aideo.fr</footer>
+<footer>AIDEO © 2026 — Frédéric Ruault — <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="791a16170d181a0d3918101d1c16571f0b">[email&#160;protected]</a></footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const WEBHOOK_URL = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-sessions';
 const WEBHOOK_GET_PARAMS = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-whatif-params';
 const WEBHOOK_SAVE_PARAMS = 'https://n8n.srv1336558.hstgr.cloud/webhook/aideo-whatif-save';
@@ -649,6 +649,8 @@ async function saveParams() {
   btn.textContent = '💾 Sauvegarde...';
   btn.disabled = true;
 
+  // On ne sauvegarde que les charges et l'objectif
+  // (Notion limite les champs Rich Text à 2000 caractères — participantsParSession dépasse cette limite)
   const params = {
     charges: {
       prix_p: v('c_prix_p'), prix_m: v('c_prix_m'), prix_o: v('c_prix_o'),
@@ -659,34 +661,16 @@ async function saveParams() {
       qual_p: v('c_qual_p'), qual_m: v('c_qual_m'), qual_o: v('c_qual_o'),
     },
     objectif: v('obj_marge'),
-    // On sauvegarde les participants par clé session (date_formation) et par type formation
-    participants: {},
-    participantsParSession: {}
   };
 
-  // Participants par type de formation (valeurs par défaut à restaurer)
-  Object.keys(FORMATIONS).forEach(fKey => {
-    const defaults = F_DEFAULTS[fKey] || [5,7,10];
-    params.participants[fKey] = { p: defaults[0], m: defaults[1], o: defaults[2] };
-  });
-
-  // Participants réels par session (clé = date_formation)
-  Object.entries(participants).forEach(([key, vals]) => {
-    params.participantsParSession[key] = {
-      p: vals.p,
-      m: vals.m,
-      o: vals.o,
-      cancelled_p: vals.cancelled_p || false,
-      cancelled_m: vals.cancelled_m || false,
-      cancelled_o: vals.cancelled_o || false,
-    };
-  });
+  const jsonStr = JSON.stringify(params);
+  console.log('Taille JSON sauvegardé :', jsonStr.length, 'caractères');
 
   try {
     await fetch(WEBHOOK_SAVE_PARAMS, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ params: JSON.stringify(params) })
+      body: JSON.stringify({ params: jsonStr })
     });
     btn.textContent = '✅ Sauvegardé !';
     setTimeout(() => { btn.textContent = '💾 Sauvegarder'; btn.disabled = false; }, 2000);
@@ -754,15 +738,4 @@ async function loadParams() {
   }
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-async function init() {
-  initSelectors();
-  await loadSessionsFromNotion();
-  await loadParams();
-  renderResults();
-}
-
-init();
-</script>
-</body>
-</html>
+// ─── INIT ─────────────────────────────────────────────�
